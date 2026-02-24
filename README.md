@@ -1,5 +1,8 @@
 # experiment_octoprobe_kibana
 
+curl -fsSL https://elastic.co/start-local | sh
+
+```
  |  ____| |         | | (_)     
  | |__  | | __ _ ___| |_ _  ___ 
  |  __| | |/ _` / __| __| |/ __|
@@ -41,4 +44,14 @@
 🔑 API key: TzE0NGJad0JHY0VhdExqbzF1RzI6WWVhSGVQRFQxYS1CQU1lUExHMy1VZw==
 
 Learn more at https://github.com/elastic/start-local
+```
 
+```
+🌐 Open your browser at http://localhost:5601
+
+   Username: elastic
+   Password: 91AwngFy
+
+🔌 Elasticsearch API endpoint: http://localhost:9200
+🔑 API key: eVh3ZGtKd0JNc2JWczlKdGx3c0E6QWdJMXVsYzl4bDZOZkc2RmJTV3YxZw==
+```
