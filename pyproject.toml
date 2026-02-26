@@ -1,0 +1,15 @@
+[project]
+name = "pytest-elasticsearch"
+version = "5.0.0"
+
+
+[tool.pytest]
+xfail_strict=true
+elasticsearch_host="localhost"
+elasticsearch_port="9200"
+# addopts = ["--showlocals", "--verbose"]
+# addopts = [
+#     "--elasticsearch_host", "localhost",
+#     "--elasticsearch_port=9200",
+# ]
+testpaths = ["tests"]

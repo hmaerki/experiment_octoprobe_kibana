@@ -1,6 +1,7 @@
 {
 	"folders": [
 		{
+			"name": "kibana",
 			"path": "."
 		},
 		{
@@ -8,5 +9,15 @@
 			"path": "../pytest-elasticsearch"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.testing.pytestEnabled": true,
+		"python.testing.pytestArgs": [
+			"-v",
+			"-s"
+		],
+		"python.defaultInterpreterPath": "${workspaceFolder:pytest-elasticsearch}/.venv/bin/python",
+		"python.analysis.extraPaths": [
+			"${workspaceFolder:pytest-elasticsearch}"
+		]
+	}
 }
