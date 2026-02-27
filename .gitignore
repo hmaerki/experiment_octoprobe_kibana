@@ -1,3 +1,4 @@
 2026-02-24a_elk/elastic-start-local/.env
 **/__pycache__/
 2026-02-27_sample_data/A/reports/**
+2026-02-27_sample_data/A/elastic/**

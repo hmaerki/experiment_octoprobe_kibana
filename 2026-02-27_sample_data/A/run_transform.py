@@ -22,68 +22,101 @@ from pathlib import Path
 from typing import Any
 
 
-def read_json(path: Path) -> dict[str, Any]:
-	with path.open("r", encoding="utf-8") as handle:
-		return json.load(handle)
+class Testgroup:
+    def __init__(
+        self,
+        directory_elastic: Path,
+        directory_reports: Path,
+        directory_run: Path,
+    ) -> None:
+        self.directory_elastic = directory_elastic
+        self.directory_reports = directory_reports
+        self.directory_run = directory_run
 
+    def read_json(self, path: Path) -> dict[str, Any]:
+        with path.open("r", encoding="utf-8") as handle:
+            return json.load(handle)
 
-def write_json(path: Path, data: dict[str, Any]) -> None:
-	path.parent.mkdir(parents=True, exist_ok=True)
-	with path.open("w", encoding="utf-8") as handle:
-		json.dump(data, handle, indent=4, ensure_ascii=False)
-		handle.write("\n")
+    def write_json(
+        self,
+        filename_json: Path,
+        data: dict[str, Any],
+    ) -> None:
+        filename = directory_elastic / filename_json.relative_to(directory_reports)
+        filename.parent.mkdir(parents=True, exist_ok=True)
+        with filename.open("w", encoding="utf-8") as handle:
+            json.dump(data, handle, indent=4, ensure_ascii=False)
 
+    def transform_run(self) -> None:
+        filename_context = self.directory_run / "context.json"
+        if not filename_context.exists():
+            raise FileNotFoundError(f"Missing testrun file: {filename_context}")
 
-def transform_dataset(dataset_dir: Path) -> None:
-	context_path = dataset_dir / "context.json"
-	if not context_path.exists():
-		raise FileNotFoundError(f"Missing testrun file: {context_path}")
+        run_json = self.read_json(filename_context)
+        run_json["testrun_id"] = run_json["time_start"]
+        self.write_json(
+            filename_json=filename_context,
+            data=run_json,
+        )
 
-	transformed_root = dataset_dir / "transformed"
-	if transformed_root.exists():
-		shutil.rmtree(transformed_root)
+        for directory_testgroup in self.directory_run.iterdir():
+            self.transform_group(
+                directory_testgroup=directory_testgroup, run_json=run_json
+            )
 
-	source_group_paths = list(dataset_dir.rglob("context_testgroup.json"))
+    def transform_group(
+        self,
+        directory_testgroup: Path,
+        run_json: dict[str, Any],
+    ) -> None:
+        if not directory_testgroup.is_dir():
+            return
+        filename_context_testgroup = directory_testgroup / "context_testgroup.json"
+        if not filename_context_testgroup.is_file():
+            return
+        group_json = self.read_json(filename_context_testgroup)
 
-	testrun_doc = read_json(context_path)
-	testrun_time_start = testrun_doc["time_start"]
+        group_json["test_group_id"] = (
+            f"{run_json['time_start']}_{group_json['testid']}"
+        )
 
-	transformed_testrun = dict(testrun_doc)
-	transformed_testrun["test_run_id"] = testrun_time_start
-	write_json(transformed_root / "context.json", transformed_testrun)
+        # transformed_group = dict(group_doc)
+        # if "commandline" in transformed_group:
+        #     transformed_group["group_commandline"] = transformed_group.pop(
+        #         "commandline"
+        #     )
+        # if "time_start" in transformed_group:
+        #     transformed_group["group_time_start"] = transformed_group.pop(
+        #         "time_start"
+        #     )
+        # if "time_end" in transformed_group:
+        #     transformed_group["group_time_end"] = transformed_group.pop("time_end")
+        # transformed_group["test_run_id"] = testrun_time_start
+        # transformed_group["test_group_id"] = test_group_id
 
-	for group_path in source_group_paths:
-		relative_group_path = group_path.relative_to(dataset_dir)
-		group_doc = read_json(group_path)
+        outcomes = group_json.pop("outcomes", [])
 
-		test_group_id = f"{testrun_time_start}_{group_doc['testid']}"
+        self.write_json(filename_context_testgroup, group_json)
 
-		transformed_group = dict(group_doc)
-		if "commandline" in transformed_group:
-			transformed_group["group_commandline"] = transformed_group.pop("commandline")
-		if "time_start" in transformed_group:
-			transformed_group["group_time_start"] = transformed_group.pop("time_start")
-		if "time_end" in transformed_group:
-			transformed_group["group_time_end"] = transformed_group.pop("time_end")
-		transformed_group["test_run_id"] = testrun_time_start
-		transformed_group["test_group_id"] = test_group_id
-
-		outcomes = transformed_group.pop("outcomes", [])
-
-		out_group_path = transformed_root / relative_group_path
-		write_json(out_group_path, transformed_group)
-
-		group_dir = out_group_path.parent
-		for index, outcome in enumerate(outcomes, start=1):
-			outcome_doc = dict(outcome)
-			outcome_doc["test_group_id"] = test_group_id
-			outcome_path = group_dir / f"context_testgroup_{index}.json"
-			write_json(outcome_path, outcome_doc)
+        for index, outcome in enumerate(outcomes, start=1):
+            outcome_doc = dict(outcome)
+            outcome_doc["test_group_id"] = group_json["test_group_id"]
+            outcome_path = directory_testgroup / f"context_testgroup_{index}.json"
+            self.write_json(outcome_path, outcome_doc)
 
 
 if __name__ == "__main__":
-	base_dir = Path(__file__).resolve().parent
-	dataset_a = base_dir
-	transform_dataset(dataset_a)
-	print(f"Transformed data written to: {dataset_a / 'transformed'}")
+    directory_reports = Path(__file__).parent / "reports"
+    directory_elastic = Path(__file__).parent / "elastic"
+    if directory_elastic.exists():
+        shutil.rmtree(directory_elastic)
 
+    for directory_run in directory_reports.iterdir():
+        if not directory_run.is_dir():
+            continue
+        testrun = Testgroup(
+            directory_elastic=directory_elastic,
+            directory_reports=directory_reports,
+            directory_run=directory_run,
+        )
+        testrun.transform_run()
