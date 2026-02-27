@@ -17,8 +17,13 @@ from elasticsearch import Elasticsearch
 @pytest.fixture(scope="session")
 def es_client() -> Elasticsearch:
     host = os.getenv("ELASTICSEARCH_URL", "http://localhost:9200")
-    password = os.getenv("ES_LOCAL_PASSWORD", "91AwngFy")
-    client = Elasticsearch(host, basic_auth=("elastic", password))
+    password = os.getenv("ES_LOCAL_PASSWORD", None)
+    
+    # Use authentication only if password is provided
+    if password:
+        client = Elasticsearch(host, basic_auth=("elastic", password))
+    else:
+        client = Elasticsearch(host)
 
     # Optional: Check connection before running tests
     if not client.ping():

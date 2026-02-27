@@ -5,8 +5,11 @@ version = "5.0.0"
 
 [tool.pytest]
 xfail_strict=true
-elasticsearch_host="localhost"
-elasticsearch_port="9200"
+elasticsearch_host="127.0.0.1"
+# elasticsearch_port="9200"
+elasticsearch_api_key="eVh3ZGtKd0JNc2JWczlKdGx3c0E6QWdJMXVsYzl4bDZOZkc2RmJTV3YxZw=="
+
+
 # addopts = ["--showlocals", "--verbose"]
 # addopts = [
 #     "--elasticsearch_host", "localhost",

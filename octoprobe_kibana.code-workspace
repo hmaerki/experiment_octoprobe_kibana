@@ -6,7 +6,7 @@
 		},
 		{
 			"name": "pytest-elasticsearch",
-			"path": "../pytest-elasticsearch"
+			"path": "../fork_pytest-elasticsearch"
 		}
 	],
 	"settings": {

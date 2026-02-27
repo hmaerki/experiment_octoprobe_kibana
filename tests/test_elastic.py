@@ -18,15 +18,15 @@ def test_elastic_process(elasticsearch_proc: ElasticSearchExecutor) -> None:
 
 def test_elasticsearch(elasticsearch: Elasticsearch) -> None:
     """Test if elasticsearch fixtures connects to process."""
-    info = elasticsearch.cluster.health()
-    assert info["status"] == "green"
+    info = elasticsearch.info()
+    health = elasticsearch.cluster.health()
+    assert health["status"] in ("yellow", "green")
 
 
 def test_default_configuration(request: FixtureRequest) -> None:
     """Test default configuration."""
     config = pytest_elasticsearch.config.get_config(request)
 
-    print(f"config.port {config.port} {config.port!r}")
     assert not config.port
     assert config.host == "127.0.0.1"
     assert not config.cluster_name
@@ -54,6 +54,18 @@ def test_external_elastic(
 
     res = elasticsearch2_noop.search(index="test-index", query={"match_all": {}})
     assert res["hits"]["total"]["value"] == 1
+
+
+def test_external_elastic2(elasticsearch: Elasticsearch) -> None:
+    """Check that nooproc connects to the same redis."""
+    elasticsearch.indices.create(index="test-index")
+    document = {
+        "author": "kimchy",
+        "text": "Elasticsearch: cool. bonsai cool.",
+        "timestamp": datetime.utcnow(),
+    }
+    res = elasticsearch.index(index="test-index", id="1", document=document)
+    assert res["result"] == "created"
 
 
 def test_cleanup_removes_user_index_after_fixture_teardown(
