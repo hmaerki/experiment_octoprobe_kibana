@@ -1,6 +1,9 @@
 [project]
 name = "pytest-elasticsearch"
 version = "5.0.0"
+dependencies = [
+	"elasticsearch>=8",
+]
 
 
 [tool.pytest]

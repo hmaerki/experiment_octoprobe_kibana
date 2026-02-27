@@ -7,64 +7,112 @@
     },
     "mappings": {
       "properties": {
-        "testbed_name": {
+        "r_testbed_name": {
           "type": "keyword"
         },
-        "testbed_instance": {
+        "r_testbed_instance": {
           "type": "keyword"
         },
-        "time_start": {
+        "r_time_start": {
           "type": "date",
           "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
         },
-        "time_end": {
+        "r_time_end": {
           "type": "date",
           "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
         },
-        "group_time_start": {
+        "g_time_start": {
           "type": "date",
           "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
         },
-        "group_time_end": {
+        "g_time_end": {
           "type": "date",
           "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
         },
-        "ref_firmware": {
+        "r_ref_firmware": {
           "type": "keyword"
         },
-        "ref_tests": {
+        "r_ref_tests": {
           "type": "keyword"
         },
-        "ref_firmware_metadata": {
+        "r_ref_firmware_metadata": {
           "type": "object",
           "enabled": true
         },
-        "ref_tests_metadata": {
+        "r_ref_tests_metadata": {
           "type": "object",
           "enabled": true
         },
-        "trigger": {
+        "r_trigger": {
           "type": "text"
         },
-        "commandline": {
+        "r_commandline": {
           "type": "text"
         },
-        "log_output": {
+        "r_log_output": {
           "type": "keyword"
         },
-        "log_directory": {
+        "r_log_directory": {
           "type": "keyword"
         },
-        "error": {
+        "r_error": {
           "type": "text"
         },
-        "directories": {
+        "r_directories": {
           "type": "object",
           "enabled": true
         },
-        "git_ref": {
+        "r_git_ref": {
           "type": "object",
           "enabled": true
+        },
+        "id_run": {
+          "type": "keyword"
+        },
+        "id_group": {
+          "type": "keyword"
+        },
+        "g_directory_relative": {
+          "type": "keyword"
+        },
+        "g_testgroup": {
+          "type": "keyword"
+        },
+        "g_testid": {
+          "type": "keyword"
+        },
+        "g_tentacle_variant": {
+          "type": "keyword"
+        },
+        "g_tentacle_variant_role": {
+          "type": "keyword"
+        },
+        "g_commandline": {
+          "type": "text"
+        },
+        "g_tentacle_mcu": {
+          "type": "keyword"
+        },
+        "g_tentacle_reference": {
+          "type": "keyword"
+        },
+        "g_log_output": {
+          "type": "keyword"
+        },
+        "g_msg_error": {
+          "type": "text"
+        },
+        "g_msg_skipped": {
+          "type": "text"
+        },
+        "t_name": {
+          "type": "keyword"
+        },
+        "t_outcome": {
+          "type": "keyword"
+        },
+        "t_text": {
+          "type": "text"
         }
       }
     }
