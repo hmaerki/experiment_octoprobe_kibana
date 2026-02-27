@@ -1,0 +1,52 @@
+{
+    "directory_relative": "RUN-TESTS_EXTMOD_HARDWARE,b@2d2d-LOLIN_D1_MINI",
+    "testgroup": "RUN-TESTS_EXTMOD_HARDWARE",
+    "testid": "RUN-TESTS_EXTMOD_HARDWARE,b@2d2d-LOLIN_D1_MINI",
+    "tentacle_variant": "2d2d-LOLIN_D1_MINI",
+    "tentacle_variant_role": "2d2d-LOLIN_D1_MINI",
+    "commandline": "run-tests.py --test-dirs=extmod_hardware",
+    "tentacle_mcu": "esp8266",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_23-28-09-CET",
+    "time_end": "2026-02-26_23-28-52-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-TESTS_EXTMOD_HARDWARE,b@2d2d-LOLIN_D1_MINI/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "extmod_hardware/machine_counter.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_encoder.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_i2c_target.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_pwm.py",
+            "outcome": "failed",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_uart_irq_break.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_uart_irq_rx.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_uart_irq_rxidle.py",
+            "outcome": "skipped",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

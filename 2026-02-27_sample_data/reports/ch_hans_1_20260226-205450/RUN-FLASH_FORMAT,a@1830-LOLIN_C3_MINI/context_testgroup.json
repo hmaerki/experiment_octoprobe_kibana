@@ -1,0 +1,22 @@
+{
+    "directory_relative": "RUN-FLASH_FORMAT,a@1830-LOLIN_C3_MINI",
+    "testgroup": "RUN-FLASH_FORMAT",
+    "testid": "RUN-FLASH_FORMAT,a@1830-LOLIN_C3_MINI",
+    "tentacle_variant": "1830-LOLIN_C3_MINI",
+    "tentacle_variant_role": "1830-LOLIN_C3_MINI",
+    "commandline": "format_flash",
+    "tentacle_mcu": "esp32",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_21-20-18-CET",
+    "time_end": "2026-02-26_21-21-14-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-FLASH_FORMAT,a@1830-LOLIN_C3_MINI/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "format_flash",
+            "outcome": "skipped",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

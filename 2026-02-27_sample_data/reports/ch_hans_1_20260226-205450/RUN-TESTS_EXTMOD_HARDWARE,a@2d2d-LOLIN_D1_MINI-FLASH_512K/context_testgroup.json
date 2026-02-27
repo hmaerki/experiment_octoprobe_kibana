@@ -1,0 +1,16 @@
+{
+    "directory_relative": "RUN-TESTS_EXTMOD_HARDWARE,a@2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "testgroup": "RUN-TESTS_EXTMOD_HARDWARE",
+    "testid": "RUN-TESTS_EXTMOD_HARDWARE,a@2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "tentacle_variant": "2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "tentacle_variant_role": "2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "commandline": "run-tests.py --test-dirs=extmod_hardware",
+    "tentacle_mcu": "esp8266",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_23-13-38-CET",
+    "time_end": "2026-02-26_23-13-59-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-TESTS_EXTMOD_HARDWARE,a@2d2d-LOLIN_D1_MINI-FLASH_512K/logger_20_info.log",
+    "outcomes": [],
+    "msg_error": "",
+    "msg_skipped": "RUN-TESTS_EXTMOD_HARDWARE,a@2d2d-LOLIN_D1_MINI-FLASH_512K: Terminating test due to: OctoprobeTestSkipException('No filesystem')"
+}

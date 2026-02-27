@@ -1,0 +1,22 @@
+{
+    "directory_relative": "RUN-FLASH_FORMAT,a@552b-RPI_PICO2_W",
+    "testgroup": "RUN-FLASH_FORMAT",
+    "testid": "RUN-FLASH_FORMAT,a@552b-RPI_PICO2_W",
+    "tentacle_variant": "552b-RPI_PICO2_W",
+    "tentacle_variant_role": "552b-RPI_PICO2_W",
+    "commandline": "format_flash",
+    "tentacle_mcu": "rp2",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_21-25-26-CET",
+    "time_end": "2026-02-26_21-26-20-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-FLASH_FORMAT,a@552b-RPI_PICO2_W/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "format_flash",
+            "outcome": "passed",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

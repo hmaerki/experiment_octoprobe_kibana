@@ -1,0 +1,137 @@
+{
+    "directory_relative": "RUN-PERFBENCH,a@5f2a-ADA_ITSYBITSY_M0",
+    "testgroup": "RUN-PERFBENCH",
+    "testid": "RUN-PERFBENCH,a@5f2a-ADA_ITSYBITSY_M0",
+    "tentacle_variant": "5f2a-ADA_ITSYBITSY_M0",
+    "tentacle_variant_role": "5f2a-ADA_ITSYBITSY_M0",
+    "commandline": "run-perfbench.py",
+    "tentacle_mcu": "samd",
+    "tentacle_reference": "",
+    "time_start": "2026-02-27_01-43-21-CET",
+    "time_end": "2026-02-27_01-45-12-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-PERFBENCH,a@5f2a-ADA_ITSYBITSY_M0/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "perf_bench/bm_chaos.py",
+            "outcome": "failed",
+            "text": "CRASH: PyboardError('exception', b'', b'MemoryError: memory allocation failed, allocating 896 bytes\\r\\n')"
+        },
+        {
+            "name": "perf_bench/bm_fannkuch.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_fft.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_float.py",
+            "outcome": "failed",
+            "text": "CRASH: PyboardError('exception', b'', b'Traceback (most recent call last):\\r\\n  File \"<stdin>\", line 105, in <module>\\r\\n  File \"<stdin>\", line 101, in bm_run\\r\\n  File \"<stdin>\", line 72, in run\\r\\n  File \"<stdin>\", line 18, in __init__\\r\\nMemoryError: memory allocation failed, allocating %u bytes\\r\\n')"
+        },
+        {
+            "name": "perf_bench/bm_hexiom.py",
+            "outcome": "failed",
+            "text": "CRASH: PyboardError('exception', b'', b'MemoryError: memory allocation failed, allocating %u bytes\\r\\n')"
+        },
+        {
+            "name": "perf_bench/bm_nqueens.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_pidigits.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_wordcount.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_import_mpy_multi.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_import_mpy_single.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_locals.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_qstr.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_str.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_yield_from.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_aes.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_mandel.py",
+            "outcome": "failed",
+            "text": "CRASH: PyboardError('exception', b'', b'Traceback (most recent call last):\\r\\n  File \"<stdin>\", line 65, in <module>\\r\\n  File \"<stdin>\", line 61, in bm_run\\r\\n  File \"<stdin>\", line 37, in <lambda>\\r\\n  File \"<stdin>\", line 23, in mandelbrot\\r\\nNameError: name not defined\\r\\n')"
+        },
+        {
+            "name": "perf_bench/misc_pystone.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_raytrace.py",
+            "outcome": "failed",
+            "text": "CRASH: PyboardError('exception', b'', b'MemoryError: memory allocation failed, allocating 136 byte\\r\\n')"
+        },
+        {
+            "name": "perf_bench/viper_call0.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call1a.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call1b.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call1c.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call2a.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call2b.py",
+            "outcome": "passed",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

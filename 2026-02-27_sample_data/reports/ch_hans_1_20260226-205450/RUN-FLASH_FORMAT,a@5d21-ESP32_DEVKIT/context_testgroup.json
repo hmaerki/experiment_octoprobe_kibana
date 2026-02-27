@@ -1,0 +1,22 @@
+{
+    "directory_relative": "RUN-FLASH_FORMAT,a@5d21-ESP32_DEVKIT",
+    "testgroup": "RUN-FLASH_FORMAT",
+    "testid": "RUN-FLASH_FORMAT,a@5d21-ESP32_DEVKIT",
+    "tentacle_variant": "5d21-ESP32_DEVKIT",
+    "tentacle_variant_role": "5d21-ESP32_DEVKIT",
+    "commandline": "format_flash",
+    "tentacle_mcu": "esp32",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_21-26-41-CET",
+    "time_end": "2026-02-26_21-27-56-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-FLASH_FORMAT,a@5d21-ESP32_DEVKIT/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "format_flash",
+            "outcome": "skipped",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

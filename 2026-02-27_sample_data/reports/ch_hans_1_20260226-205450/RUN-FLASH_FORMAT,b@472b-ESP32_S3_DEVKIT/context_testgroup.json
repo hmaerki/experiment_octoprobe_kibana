@@ -1,0 +1,22 @@
+{
+    "directory_relative": "RUN-FLASH_FORMAT,b@472b-ESP32_S3_DEVKIT",
+    "testgroup": "RUN-FLASH_FORMAT",
+    "testid": "RUN-FLASH_FORMAT,b@472b-ESP32_S3_DEVKIT",
+    "tentacle_variant": "472b-ESP32_S3_DEVKIT",
+    "tentacle_variant_role": "472b-ESP32_S3_DEVKIT",
+    "commandline": "format_flash",
+    "tentacle_mcu": "esp32",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_21-25-04-CET",
+    "time_end": "2026-02-26_21-25-26-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-FLASH_FORMAT,b@472b-ESP32_S3_DEVKIT/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "format_flash",
+            "outcome": "skipped",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

@@ -1,0 +1,16 @@
+{
+    "directory_relative": "RUN-TESTS_STANDARD_VIA_MPY,a@3a21-PYBV11-DP_THREAD",
+    "testgroup": "RUN-TESTS_STANDARD_VIA_MPY",
+    "testid": "RUN-TESTS_STANDARD_VIA_MPY,a@3a21-PYBV11-DP_THREAD",
+    "tentacle_variant": "3a21-PYBV11-DP_THREAD",
+    "tentacle_variant_role": "3a21-PYBV11-DP_THREAD",
+    "commandline": "run-tests.py --via-mpy",
+    "tentacle_mcu": "stm32",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_23-04-02-CET",
+    "time_end": "2026-02-26_23-07-23-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-TESTS_STANDARD_VIA_MPY,a@3a21-PYBV11-DP_THREAD/logger_20_info.log",
+    "outcomes": [],
+    "msg_error": "",
+    "msg_skipped": ""
+}

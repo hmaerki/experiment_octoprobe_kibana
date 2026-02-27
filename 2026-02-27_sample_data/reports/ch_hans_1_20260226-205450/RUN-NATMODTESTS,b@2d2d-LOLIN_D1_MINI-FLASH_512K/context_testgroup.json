@@ -1,0 +1,16 @@
+{
+    "directory_relative": "RUN-NATMODTESTS,b@2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "testgroup": "RUN-NATMODTESTS",
+    "testid": "RUN-NATMODTESTS,b@2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "tentacle_variant": "2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "tentacle_variant_role": "2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "commandline": "run-natmodtests.py",
+    "tentacle_mcu": "esp8266",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_23-10-50-CET",
+    "time_end": "2026-02-26_23-11-11-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-NATMODTESTS,b@2d2d-LOLIN_D1_MINI-FLASH_512K/logger_20_info.log",
+    "outcomes": [],
+    "msg_error": "",
+    "msg_skipped": "RUN-NATMODTESTS,b@2d2d-LOLIN_D1_MINI-FLASH_512K: Terminating test due to: OctoprobeTestSkipException('Board does not support native code!')"
+}

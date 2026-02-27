@@ -1,0 +1,22 @@
+{
+    "directory_relative": "RUN-FLASH_FORMAT,b@3a21-PYBV11-THREAD",
+    "testgroup": "RUN-FLASH_FORMAT",
+    "testid": "RUN-FLASH_FORMAT,b@3a21-PYBV11-THREAD",
+    "tentacle_variant": "3a21-PYBV11-THREAD",
+    "tentacle_variant_role": "3a21-PYBV11-THREAD",
+    "commandline": "format_flash",
+    "tentacle_mcu": "stm32",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_21-14-47-CET",
+    "time_end": "2026-02-26_21-15-07-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-FLASH_FORMAT,b@3a21-PYBV11-THREAD/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "format_flash",
+            "outcome": "passed",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

@@ -1,0 +1,52 @@
+{
+    "directory_relative": "RUN-TESTS_EXTMOD_HARDWARE_NATIVE,b@3a21-PYBV11-DP_THREAD",
+    "testgroup": "RUN-TESTS_EXTMOD_HARDWARE_NATIVE",
+    "testid": "RUN-TESTS_EXTMOD_HARDWARE_NATIVE,b@3a21-PYBV11-DP_THREAD",
+    "tentacle_variant": "3a21-PYBV11-DP_THREAD",
+    "tentacle_variant_role": "3a21-PYBV11-DP_THREAD",
+    "commandline": "run-tests.py --via-mpy --emit native --test-dirs=extmod_hardware",
+    "tentacle_mcu": "stm32",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_22-48-33-CET",
+    "time_end": "2026-02-26_22-49-13-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-TESTS_EXTMOD_HARDWARE_NATIVE,b@3a21-PYBV11-DP_THREAD/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "extmod_hardware/machine_counter.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_encoder.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_i2c_target.py",
+            "outcome": "failed",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_pwm.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_uart_irq_break.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_uart_irq_rx.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_uart_irq_rxidle.py",
+            "outcome": "passed",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}
