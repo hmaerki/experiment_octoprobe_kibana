@@ -1,0 +1,72 @@
+{
+  "index_patterns": ["octoprobe_a"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "properties": {
+        "testbed_name": {
+          "type": "keyword"
+        },
+        "testbed_instance": {
+          "type": "keyword"
+        },
+        "time_start": {
+          "type": "date",
+          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+        },
+        "time_end": {
+          "type": "date",
+          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+        },
+        "group_time_start": {
+          "type": "date",
+          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+        },
+        "group_time_end": {
+          "type": "date",
+          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+        },
+        "ref_firmware": {
+          "type": "keyword"
+        },
+        "ref_tests": {
+          "type": "keyword"
+        },
+        "ref_firmware_metadata": {
+          "type": "object",
+          "enabled": true
+        },
+        "ref_tests_metadata": {
+          "type": "object",
+          "enabled": true
+        },
+        "trigger": {
+          "type": "text"
+        },
+        "commandline": {
+          "type": "text"
+        },
+        "log_output": {
+          "type": "keyword"
+        },
+        "log_directory": {
+          "type": "keyword"
+        },
+        "error": {
+          "type": "text"
+        },
+        "directories": {
+          "type": "object",
+          "enabled": true
+        },
+        "git_ref": {
+          "type": "object",
+          "enabled": true
+        }
+      }
+    }
+  }
+}
