@@ -21,6 +21,10 @@ import shutil
 from pathlib import Path
 from typing import Any
 
+PREFIX_RUN = "r_"
+PREFIX_GROUP = "g_"
+PREFIX_TEST = "t_"
+
 
 class Testgroup:
     def __init__(
@@ -32,6 +36,10 @@ class Testgroup:
         self.directory_elastic = directory_elastic
         self.directory_reports = directory_reports
         self.directory_run = directory_run
+
+    @staticmethod
+    def prefix(doc_json: dict[str, Any], label: str) -> dict[str, Any]:
+        return {f"{label}{k}": v for k, v in doc_json.items()}
 
     def read_json(self, path: Path) -> dict[str, Any]:
         with path.open("r", encoding="utf-8") as handle:
@@ -48,36 +56,42 @@ class Testgroup:
             json.dump(data, handle, indent=4, ensure_ascii=False)
 
     def transform_run(self) -> None:
-        filename_context = self.directory_run / "context.json"
-        if not filename_context.exists():
-            raise FileNotFoundError(f"Missing testrun file: {filename_context}")
+        filename_run = self.directory_run / "context.json"
+        if not filename_run.exists():
+            raise FileNotFoundError(f"Missing testrun file: {filename_run}")
 
-        run_json = self.read_json(filename_context)
-        run_json["testrun_id"] = run_json["time_start"]
+        dict_run = self.read_json(filename_run)
+        dict_run = self.prefix(doc_json=dict_run, label=PREFIX_RUN)
+        dict_id = {"id_run": dict_run[PREFIX_RUN + "time_start"]}
+        dict_run.update(dict_id)
         self.write_json(
-            filename_json=filename_context,
-            data=run_json,
+            filename_json=filename_run,
+            data=dict_run,
         )
 
         for directory_testgroup in self.directory_run.iterdir():
             self.transform_group(
-                directory_testgroup=directory_testgroup, run_json=run_json
+                directory_testgroup=directory_testgroup,
+                run_json=dict_run,
+                dict_id=dict_id,
             )
 
     def transform_group(
         self,
         directory_testgroup: Path,
         run_json: dict[str, Any],
+        dict_id: dict[str, str],
     ) -> None:
         if not directory_testgroup.is_dir():
             return
-        filename_context_testgroup = directory_testgroup / "context_testgroup.json"
-        if not filename_context_testgroup.is_file():
+        filename_group = directory_testgroup / "context_testgroup.json"
+        if not filename_group.is_file():
             return
-        group_json = self.read_json(filename_context_testgroup)
+        dict_group = self.read_json(filename_group)
+        dict_group = self.prefix(doc_json=dict_group, label=PREFIX_GROUP)
 
-        group_json["test_group_id"] = (
-            f"{run_json['time_start']}_{group_json['testid']}"
+        dict_id["id_group"] = (
+            f"{run_json[PREFIX_RUN + 'time_start']}/{dict_group[PREFIX_GROUP + 'testid']}"
         )
 
         # transformed_group = dict(group_doc)
@@ -94,15 +108,16 @@ class Testgroup:
         # transformed_group["test_run_id"] = testrun_time_start
         # transformed_group["test_group_id"] = test_group_id
 
-        outcomes = group_json.pop("outcomes", [])
+        outcomes = dict_group[PREFIX_GROUP + "outcomes"]
+        del dict_group[PREFIX_GROUP + "outcomes"]
 
-        self.write_json(filename_context_testgroup, group_json)
+        self.write_json(filename_group, dict_group)
 
-        for index, outcome in enumerate(outcomes, start=1):
-            outcome_doc = dict(outcome)
-            outcome_doc["test_group_id"] = group_json["test_group_id"]
-            outcome_path = directory_testgroup / f"context_testgroup_{index}.json"
-            self.write_json(outcome_path, outcome_doc)
+        for index, dict_outcome in enumerate(outcomes, start=1):
+            dict_outcome = self.prefix(doc_json=dict_outcome, label=PREFIX_TEST)
+            dict_outcome.update(dict_id)
+            filename_outcome = directory_testgroup / f"testgroup_{index}.json"
+            self.write_json(filename_outcome, dict_outcome)
 
 
 if __name__ == "__main__":
