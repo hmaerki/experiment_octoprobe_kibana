@@ -1,0 +1,137 @@
+{
+    "directory_relative": "RUN-PERFBENCH,a@1133-TEENSY40",
+    "testgroup": "RUN-PERFBENCH",
+    "testid": "RUN-PERFBENCH,a@1133-TEENSY40",
+    "tentacle_variant": "1133-TEENSY40",
+    "tentacle_variant_role": "1133-TEENSY40",
+    "commandline": "run-perfbench.py",
+    "tentacle_mcu": "mimxrt",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_13-20-24-CET",
+    "time_end": "2026-02-26_13-20-38-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-PERFBENCH,a@1133-TEENSY40/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "perf_bench/bm_chaos.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_fannkuch.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_fft.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_float.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_hexiom.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_nqueens.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_pidigits.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_wordcount.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_import_mpy_multi.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_import_mpy_single.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_locals.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_qstr.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_str.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_yield_from.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_aes.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_mandel.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_pystone.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_raytrace.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call0.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call1a.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call1b.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call1c.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call2a.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call2b.py",
+            "outcome": "passed",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

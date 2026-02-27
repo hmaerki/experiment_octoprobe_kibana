@@ -1,0 +1,137 @@
+{
+    "directory_relative": "RUN-PERFBENCH,b@2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "testgroup": "RUN-PERFBENCH",
+    "testid": "RUN-PERFBENCH,b@2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "tentacle_variant": "2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "tentacle_variant_role": "2d2d-LOLIN_D1_MINI-FLASH_512K",
+    "commandline": "run-perfbench.py",
+    "tentacle_mcu": "esp8266",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_10-53-26-CET",
+    "time_end": "2026-02-26_10-54-37-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-PERFBENCH,b@2d2d-LOLIN_D1_MINI-FLASH_512K/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "perf_bench/bm_chaos.py",
+            "outcome": "skipped",
+            "text": "SKIP"
+        },
+        {
+            "name": "perf_bench/bm_fannkuch.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_fft.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_float.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_hexiom.py",
+            "outcome": "skipped",
+            "text": "too large"
+        },
+        {
+            "name": "perf_bench/bm_nqueens.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_pidigits.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/bm_wordcount.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_import_mpy_multi.py",
+            "outcome": "skipped",
+            "text": "SKIP"
+        },
+        {
+            "name": "perf_bench/core_import_mpy_single.py",
+            "outcome": "skipped",
+            "text": "SKIP"
+        },
+        {
+            "name": "perf_bench/core_locals.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_qstr.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_str.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/core_yield_from.py",
+            "outcome": "skipped",
+            "text": "SKIP: no matching params"
+        },
+        {
+            "name": "perf_bench/misc_aes.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_mandel.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_pystone.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/misc_raytrace.py",
+            "outcome": "skipped",
+            "text": "SKIP: no matching params"
+        },
+        {
+            "name": "perf_bench/viper_call0.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call1a.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call1b.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call1c.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call2a.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "perf_bench/viper_call2b.py",
+            "outcome": "skipped",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

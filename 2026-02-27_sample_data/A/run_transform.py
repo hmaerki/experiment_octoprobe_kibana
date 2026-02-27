@@ -73,7 +73,7 @@ class Testgroup:
             self.transform_group(
                 directory_testgroup=directory_testgroup,
                 run_json=dict_run,
-                dict_id=dict_id,
+                dict_id=dict_id.copy(),
             )
 
     def transform_group(
@@ -90,27 +90,14 @@ class Testgroup:
         dict_group = self.read_json(filename_group)
         dict_group = self.prefix(doc_json=dict_group, label=PREFIX_GROUP)
 
-        dict_id["id_group"] = (
-            f"{run_json[PREFIX_RUN + 'time_start']}/{dict_group[PREFIX_GROUP + 'testid']}"
-        )
-
-        # transformed_group = dict(group_doc)
-        # if "commandline" in transformed_group:
-        #     transformed_group["group_commandline"] = transformed_group.pop(
-        #         "commandline"
-        #     )
-        # if "time_start" in transformed_group:
-        #     transformed_group["group_time_start"] = transformed_group.pop(
-        #         "time_start"
-        #     )
-        # if "time_end" in transformed_group:
-        #     transformed_group["group_time_end"] = transformed_group.pop("time_end")
-        # transformed_group["test_run_id"] = testrun_time_start
-        # transformed_group["test_group_id"] = test_group_id
 
         outcomes = dict_group[PREFIX_GROUP + "outcomes"]
         del dict_group[PREFIX_GROUP + "outcomes"]
 
+        dict_id["id_group"] = (
+            f"{run_json[PREFIX_RUN + 'time_start']}/{dict_group[PREFIX_GROUP + 'testid']}"
+        )
+        dict_group.update(dict_id)
         self.write_json(filename_group, dict_group)
 
         for index, dict_outcome in enumerate(outcomes, start=1):
