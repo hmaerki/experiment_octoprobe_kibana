@@ -47,9 +47,12 @@ class Document:
     dict_doc: dict[str, str | int | dict]
 
     def __post_init__(self) -> None:
-        assert isinstance(self.id, str), id
-        assert self.id.find("/") == -1, f"id='{id}' should not contain a '/'!"
-        assert isinstance(self.parent_document, Document | None), id
+        assert isinstance(self.id, str), self.id
+        assert self.id.find("/") == -1, f"id='{self.id}' should not contain a '/'!"
+        assert isinstance(self.parent_document, Document | None), self.id
+        assert isinstance(self.dict_doc, dict), self.dict_doc
+        if self.parent_document is not None:
+            assert self.id != self.parent_document.id, f"Expected: {self.id=} != {self.parent_document.id=}"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -141,18 +144,18 @@ class Testgroup:
         #     "parent": "run_001"
         # }
         dict_group[JOIN_MULTIPLE] = {"name": "group", "parent": id_run}
-        group_document=Document(
-                id_name="id_group",
-                id=id_group,
-                parent_document=parent_run,
-                dict_doc=dict_group,
-            )
+        group_document = Document(
+            id_name="id_group",
+            id=id_group,
+            parent_document=parent_run,
+            dict_doc=dict_group,
+        )
         self.write_json(
             filename_group,
             document=Document(
                 id_name="id_group",
                 id=id_group,
-                parent_document=group_document,
+                parent_document=parent_run,
                 dict_doc=dict_group,
             ),
         )
@@ -240,12 +243,15 @@ class Elastic:
             assert isinstance(document, Document)
             try:
                 # Extract routing from join field if it's a child document
-                routing = None
-                if JOIN_MULTIPLE in document.dict_doc:
-                    join_field = document.dict_doc[JOIN_MULTIPLE]
-                    if isinstance(join_field, dict) and "parent" in join_field:
-                        routing = join_field["parent"]
+                # routing = None
+                # if JOIN_MULTIPLE in document.dict_doc:
+                #     join_field = document.dict_doc[JOIN_MULTIPLE]
+                #     if isinstance(join_field, dict) and "parent" in join_field:
+                #         routing = join_field["parent"]
 
+                routing = None
+                if document.parent_document is not None:
+                    routing = document.parent_document.id
                 self.client.index(
                     index=INDEX_NAME,
                     document=document.dict_doc,
