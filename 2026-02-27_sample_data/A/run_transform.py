@@ -19,7 +19,7 @@ from __future__ import annotations
 import dataclasses
 import json
 import shutil
-from pathlib import Path
+import pathlib
 import typing
 
 from elasticsearch import Elasticsearch, helpers
@@ -28,12 +28,19 @@ PREFIX_RUN = "r_"
 PREFIX_GROUP = "g_"
 PREFIX_TEST = "t_"
 
-ES_HOST = "localhost:9200"
-ES_USER = "elastic"
-ES_PASSWORD = "91AwngFy"
+if False:
+    ES_HOST = "localhost:9200"
+    ES_USER = "elastic"
+    ES_PASSWORD = "91AwngFy"
+else:
+    ES_HOST = "reports.octoprobe.org:9200"
+    ES_USER = "elastic"
+    ES_PASSWORD = "xxx"
+
 INDEX_NAME = "octoprobe_a"
 
 ES_WRITE = True
+WRITE_JSON_FILES = False
 INHERIT_PARENT_PROPERTIES = True
 
 ID_DELIMITER = " | "
@@ -45,6 +52,7 @@ class Document:
     prefix: str
     id_name: str
     id: str
+    timestamp: str
     parent: typing.Self | None
     dict_doc: dict[str, str | int | dict]
 
@@ -53,6 +61,7 @@ class Document:
         assert isinstance(self.id_name, str), self.id_name
         assert isinstance(self.id, str), self.id
         assert self.id.find("/") == -1, f"id='{self.id}' should not contain a '/'!"
+        assert isinstance(self.timestamp, str), self.timestamp
         assert isinstance(self.parent, Document | None), self.id
         assert isinstance(self.dict_doc, dict), self.dict_doc
         if self.parent is not None:
@@ -61,6 +70,8 @@ class Document:
             )
 
         self.apply_prefix()
+
+        self.dict_doc["@timestamp"] = self.timestamp
 
         assert self.id_name not in self.dict_doc
         self.dict_doc[self.id_name] = self.id
@@ -92,21 +103,26 @@ class Document:
 
 @dataclasses.dataclass(frozen=True)
 class Testgroup:
-    directory_elastic: Path
-    directory_reports: Path
-    directory_run: Path
+    directory_elastic: pathlib.Path
+    directory_reports: pathlib.Path
+    directory_run: pathlib.Path
     documents: list[Document] = dataclasses.field(default_factory=list)
 
-    def read_json(self, path: Path) -> dict[str, typing.Any]:
+    def read_json(self, path: pathlib.Path) -> dict[str, typing.Any]:
         with path.open("r", encoding="utf-8") as handle:
             return json.load(handle)
 
     def write_json(
         self,
-        filename_json: Path,
+        filename_json: pathlib.Path,
         document: Document,
     ) -> None:
         assert isinstance(document, Document)
+
+        self.documents.append(document)
+
+        if not WRITE_JSON_FILES:
+            return
 
         filename = self.directory_elastic / filename_json.relative_to(
             self.directory_reports
@@ -114,8 +130,6 @@ class Testgroup:
         filename.parent.mkdir(parents=True, exist_ok=True)
         with filename.open("w", encoding="utf-8") as handle:
             json.dump(document.dict_doc, handle, indent=4, ensure_ascii=False)
-
-        self.documents.append(document)
 
     def transform_run(self) -> None:
         filename_run = self.directory_run / "context.json"
@@ -128,6 +142,7 @@ class Testgroup:
             prefix=PREFIX_RUN,
             id_name="id_run",
             id=id_run,
+            timestamp=dict_run["time_start"],
             parent=None,
             dict_doc=dict_run,
         )
@@ -145,7 +160,7 @@ class Testgroup:
 
     def transform_group(
         self,
-        directory_testgroup: Path,
+        directory_testgroup: pathlib.Path,
         run_doc: Document,
         id_run: str,
     ) -> None:
@@ -163,6 +178,7 @@ class Testgroup:
             prefix=PREFIX_GROUP,
             id_name="id_group",
             id=id_group,
+            timestamp=dict_group["time_start"],
             parent=run_doc,
             dict_doc=dict_group,
         )
@@ -175,6 +191,7 @@ class Testgroup:
                 prefix=PREFIX_TEST,
                 id_name="id_test",
                 id=id_test,
+                timestamp=group_doc.timestamp,
                 parent=group_doc,
                 dict_doc=dict_outcome,
             )
@@ -224,7 +241,7 @@ class Elastic:
             pass
 
     def apply_index_template(self) -> None:
-        template_path = Path(__file__).parent / "create_template.json"
+        template_path = pathlib.Path(__file__).parent / "create_template.json"
 
         try:
             with template_path.open("r", encoding="utf-8") as f:
@@ -293,8 +310,9 @@ class Elastic:
 
 
 def main() -> None:
-    directory_reports = Path(__file__).parent / "reports"
-    directory_elastic = Path(__file__).parent / "elastic"
+    directory_reports = pathlib.Path.cwd() / "reports"
+    directory_elastic = pathlib.Path.cwd() / "elastic"
+    assert directory_reports.is_dir(), directory_reports
     if directory_elastic.exists():
         shutil.rmtree(directory_elastic)
 
@@ -304,6 +322,7 @@ def main() -> None:
     el.apply_index_template()
 
     for directory_run in directory_reports.iterdir():
+        print(f"*** {directory_run}")
         if not directory_run.is_dir():
             continue
         testrun = Testgroup(
