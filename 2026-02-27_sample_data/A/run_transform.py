@@ -23,7 +23,6 @@ from pathlib import Path
 from typing import Any
 
 from elasticsearch import Elasticsearch
-from elasticsearch.helpers import bulk
 
 PREFIX_RUN = "r_"
 PREFIX_GROUP = "g_"
@@ -37,11 +36,14 @@ INDEX_NAME = "octoprobe_a"
 ES_WRITE = True
 
 ID_DELIMITER = " | "
+JOIN_MULTIPLE = "join_multiple"
 
 
 @dataclasses.dataclass(frozen=True)
 class Document:
+    id_name: str
     id: str
+    parent_id: str | None
     dict_doc: dict[str, Any]
 
     def __post_init__(self) -> None:
@@ -93,10 +95,15 @@ class Testgroup:
         #     "name": "run"
         # }
         dict_run["id_run"] = id_run
-        dict_run["join_multiple"] = {"name": "run"}
+        dict_run[JOIN_MULTIPLE] = {"name": "run"}
         self.write_json(
             filename_json=filename_run,
-            document=Document(id=id_run, dict_doc=dict_run),
+            document=Document(
+                id_name="id_run",
+                id=id_run,
+                parent_id=None,
+                dict_doc=dict_run,
+            ),
         )
 
         for directory_testgroup in self.directory_run.iterdir():
@@ -130,9 +137,15 @@ class Testgroup:
         #     "name": "group",
         #     "parent": "run_001"
         # }
-        dict_group["join_multiple"] = {"name": "group", "parent": id_run}
+        dict_group[JOIN_MULTIPLE] = {"name": "group", "parent": id_run}
         self.write_json(
-            filename_group, document=Document(id=id_group, dict_doc=dict_group)
+            filename_group,
+            document=Document(
+                id_name="id_group",
+                id=id_group,
+                parent_id=id_run,
+                dict_doc=dict_group,
+            ),
         )
 
         for index, dict_outcome in enumerate(outcomes, start=1):
@@ -141,10 +154,16 @@ class Testgroup:
             dict_outcome = self.prefix(doc_json=dict_outcome, label=PREFIX_TEST)
             # dict_outcome.update(dict_id)
             # dict_outcome["join_run_test"] = {"name": "test", "parent": id_run}
-            dict_outcome["join_multiple"] = {"name": "test", "parent": id_group}
+            dict_outcome[JOIN_MULTIPLE] = {"name": "test", "parent": id_group}
             filename_outcome = directory_testgroup / f"testgroup_{index}.json"
             self.write_json(
-                filename_outcome, document=Document(id=id_test, dict_doc=dict_outcome)
+                filename_outcome,
+                document=Document(
+                    id_name="id_test",
+                    id=id_test,
+                    parent_id=id_group,
+                    dict_doc=dict_outcome,
+                ),
             )
 
 
@@ -213,11 +232,11 @@ class Elastic:
             try:
                 # Extract routing from join field if it's a child document
                 routing = None
-                if "join_multiple" in document.dict_doc:
-                    join_field = document.dict_doc["join_multiple"]
+                if JOIN_MULTIPLE in document.dict_doc:
+                    join_field = document.dict_doc[JOIN_MULTIPLE]
                     if isinstance(join_field, dict) and "parent" in join_field:
                         routing = join_field["parent"]
-                
+
                 self.client.index(
                     index=INDEX_NAME,
                     document=document.dict_doc,
@@ -228,34 +247,6 @@ class Elastic:
             except Exception as exc:
                 failed += 1
                 print(f"Failed to write document:\n{document}\n\n{exc}")
-
-        print(f"Elastic upload {success}/{len(documents)}")
-        if failed:
-            print(f"Elastic upload failures: {failed}")
-
-    def write_documents(self, documents: list[dict]) -> None:
-        if not ES_WRITE:
-            return
-
-        for document in documents:
-            assert isinstance(document, Document)
-
-        actions = (
-            {"_index": INDEX_NAME, "_source": document} for document in documents
-        )
-
-        try:
-            success, errors = bulk(
-                client=self.client,
-                actions=actions,
-                raise_on_error=False,
-                stats_only=False,
-            )
-        except Exception as exc:
-            print(f"Elastic bulk write failed: {exc}")
-            return
-
-        failed = errors if isinstance(errors, int) else len(errors)
 
         print(f"Elastic upload {success}/{len(documents)}")
         if failed:
