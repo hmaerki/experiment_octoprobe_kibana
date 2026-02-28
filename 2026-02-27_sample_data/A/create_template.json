@@ -15,10 +15,14 @@
                 "id_group": {
                     "type": "keyword"
                 },
-                "join_run_group": {
+                "id_test": {
+                    "type": "keyword"
+                },
+                "join_multiple": {
                     "type": "join",
                     "relations": {
-                        "run": "group"
+                        "run": "group",
+                        "group": "test"
                     }
                 },
                 "r_testbed_name": {
