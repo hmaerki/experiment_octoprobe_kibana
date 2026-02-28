@@ -1,0 +1,10 @@
+{
+    "id_run": "run_001",
+    "testbed_name": "testbed_micropython",
+    "testbed_instance": "ch_hans_1",
+    "time_start": "2026-02-26_20-54-50-CET",
+    "time_end": "2026-02-27_09-03-47-CET",
+    "run_join": {
+        "name": "run"
+    }
+}

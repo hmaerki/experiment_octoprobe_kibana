@@ -1,120 +1,128 @@
 {
-  "index_patterns": ["octoprobe_a"],
-  "template": {
-    "settings": {
-      "number_of_shards": 1,
-      "number_of_replicas": 0
-    },
-    "mappings": {
-      "properties": {
-        "r_testbed_name": {
-          "type": "keyword"
+    "index_patterns": [
+        "octoprobe_*"
+    ],
+    "template": {
+        "settings": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
         },
-        "r_testbed_instance": {
-          "type": "keyword"
-        },
-        "r_time_start": {
-          "type": "date",
-          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
-        },
-        "r_time_end": {
-          "type": "date",
-          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
-        },
-        "g_time_start": {
-          "type": "date",
-          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
-        },
-        "g_time_end": {
-          "type": "date",
-          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
-        },
-        "r_ref_firmware": {
-          "type": "keyword"
-        },
-        "r_ref_tests": {
-          "type": "keyword"
-        },
-        "r_ref_firmware_metadata": {
-          "type": "object",
-          "enabled": true
-        },
-        "r_ref_tests_metadata": {
-          "type": "object",
-          "enabled": true
-        },
-        "r_trigger": {
-          "type": "text"
-        },
-        "r_commandline": {
-          "type": "text"
-        },
-        "r_log_output": {
-          "type": "keyword"
-        },
-        "r_log_directory": {
-          "type": "keyword"
-        },
-        "r_error": {
-          "type": "text"
-        },
-        "r_directories": {
-          "type": "object",
-          "enabled": true
-        },
-        "r_git_ref": {
-          "type": "object",
-          "enabled": true
-        },
-        "id_run": {
-          "type": "keyword"
-        },
-        "id_group": {
-          "type": "keyword"
-        },
-        "g_directory_relative": {
-          "type": "keyword"
-        },
-        "g_testgroup": {
-          "type": "keyword"
-        },
-        "g_testid": {
-          "type": "keyword"
-        },
-        "g_tentacle_variant": {
-          "type": "keyword"
-        },
-        "g_tentacle_variant_role": {
-          "type": "keyword"
-        },
-        "g_commandline": {
-          "type": "text"
-        },
-        "g_tentacle_mcu": {
-          "type": "keyword"
-        },
-        "g_tentacle_reference": {
-          "type": "keyword"
-        },
-        "g_log_output": {
-          "type": "keyword"
-        },
-        "g_msg_error": {
-          "type": "text"
-        },
-        "g_msg_skipped": {
-          "type": "text"
-        },
-        "t_name": {
-          "type": "keyword"
-        },
-        "t_outcome": {
-          "type": "keyword"
-        },
-        "t_text": {
-          "type": "text"
+        "mappings": {
+            "properties": {
+                "id_run": {
+                    "type": "keyword"
+                },
+                "id_group": {
+                    "type": "keyword"
+                },
+                "join_run_group": {
+                    "type": "join",
+                    "relations": {
+                        "run": "group"
+                    }
+                },
+                "r_testbed_name": {
+                    "type": "keyword"
+                },
+                "r_testbed_instance": {
+                    "type": "keyword"
+                },
+                "r_time_start": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+                },
+                "r_time_end": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+                },
+                "g_time_start": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+                },
+                "g_time_end": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+                },
+                "r_ref_firmware": {
+                    "type": "keyword"
+                },
+                "r_ref_tests": {
+                    "type": "keyword"
+                },
+                "r_ref_firmware_metadata": {
+                    "type": "object",
+                    "enabled": true
+                },
+                "r_ref_tests_metadata": {
+                    "type": "object",
+                    "enabled": true
+                },
+                "r_trigger": {
+                    "type": "text"
+                },
+                "r_commandline": {
+                    "type": "text"
+                },
+                "r_log_output": {
+                    "type": "keyword"
+                },
+                "r_log_directory": {
+                    "type": "keyword"
+                },
+                "r_error": {
+                    "type": "text"
+                },
+                "r_directories": {
+                    "type": "object",
+                    "enabled": true
+                },
+                "r_git_ref": {
+                    "type": "object",
+                    "enabled": true
+                },
+                "g_directory_relative": {
+                    "type": "keyword"
+                },
+                "g_testgroup": {
+                    "type": "keyword"
+                },
+                "g_testid": {
+                    "type": "keyword"
+                },
+                "g_tentacle_variant": {
+                    "type": "keyword"
+                },
+                "g_tentacle_variant_role": {
+                    "type": "keyword"
+                },
+                "g_commandline": {
+                    "type": "text"
+                },
+                "g_tentacle_mcu": {
+                    "type": "keyword"
+                },
+                "g_tentacle_reference": {
+                    "type": "keyword"
+                },
+                "g_log_output": {
+                    "type": "keyword"
+                },
+                "g_msg_error": {
+                    "type": "text"
+                },
+                "g_msg_skipped": {
+                    "type": "text"
+                },
+                "t_name": {
+                    "type": "keyword"
+                },
+                "t_outcome": {
+                    "type": "keyword"
+                },
+                "t_text": {
+                    "type": "text"
+                }
+            }
         }
-      }
     }
-  }
 }

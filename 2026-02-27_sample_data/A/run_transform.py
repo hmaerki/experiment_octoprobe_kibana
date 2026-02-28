@@ -78,8 +78,13 @@ class Testgroup:
 
         dict_run = self.read_json(filename_run)
         dict_run = self.prefix(doc_json=dict_run, label=PREFIX_RUN)
-        dict_id = {"id_run": dict_run[PREFIX_RUN + "time_start"]}
-        dict_run.update(dict_id)
+        id_run = dict_run[PREFIX_RUN + "time_start"]
+        # "id_run": "run_001",
+        # "join_run_group": {
+        #     "name": "run"
+        # }
+        dict_run["id_run"] = id_run
+        dict_run["join_run_group"] = {"name": "run"}
         self.write_json(
             filename_json=filename_run,
             data=dict_run,
@@ -89,14 +94,14 @@ class Testgroup:
             self.transform_group(
                 directory_testgroup=directory_testgroup,
                 run_json=dict_run,
-                dict_id=dict_id.copy(),
+                id_run=id_run,
             )
 
     def transform_group(
         self,
         directory_testgroup: Path,
         run_json: dict[str, Any],
-        dict_id: dict[str, str],
+        id_run: str,
     ) -> None:
         if not directory_testgroup.is_dir():
             return
@@ -109,80 +114,127 @@ class Testgroup:
         outcomes = dict_group[PREFIX_GROUP + "outcomes"]
         del dict_group[PREFIX_GROUP + "outcomes"]
 
-        dict_id["id_group"] = (
-            f"{run_json[PREFIX_RUN + 'time_start']}/{dict_group[PREFIX_GROUP + 'testid']}"
-        )
-        dict_group.update(dict_id)
+        id_group = f"{run_json[PREFIX_RUN + 'time_start']}/{dict_group[PREFIX_GROUP + 'testid']}"
+        dict_group["id_group"] = id_group
+        # "join_run_group": {
+        #     "name": "group",
+        #     "parent": "run_001"
+        # }
+        dict_group["join_run_group"] = {"name": "group", "parent": id_run}
         self.write_json(filename_group, dict_group)
 
         for index, dict_outcome in enumerate(outcomes, start=1):
             dict_outcome = self.prefix(doc_json=dict_outcome, label=PREFIX_TEST)
-            dict_outcome.update(dict_id)
+            # dict_outcome.update(dict_id)
             filename_outcome = directory_testgroup / f"testgroup_{index}.json"
             self.write_json(filename_outcome, dict_outcome)
 
 
-def write_elastic(documents: list[dict]) -> None:
-    if not ES_WRITE:
-        return
+class Elastic:
+    def __init__(self) -> None:
+        if not ES_WRITE:
+            return
 
-    if not documents:
-        return
-
-    client = Elasticsearch(
-        f"http://{ES_HOST}",
-        basic_auth=(ES_USER, ES_PASSWORD),
-    )
-
-    # Delete existing index
-    try:
-        client.indices.delete(index=INDEX_NAME, ignore_unavailable=True)
-        print(f"Deleted index: {INDEX_NAME}")
-    except Exception as exc:
-        print(f"Failed to delete index: {exc}")
-
-    # Apply index template
-    template_path = Path(__file__).parent / "create_template.json"
-    template_name = f"{INDEX_NAME}_template"
-    try:
-        client.indices.delete_index_template(name=template_name)
-    except Exception as exc:
-        print(f"Failed to delete template: {exc}")
-
-    try:
-        client.indices.delete_index_template(name=INDEX_NAME)
-    except Exception as exc:
-        print(f"Failed to delete template: {exc}")
-
-    try:        
-        with template_path.open("r", encoding="utf-8") as f:
-            template_body = json.load(f)
-        client.indices.put_index_template(
-            name=template_name,
-            body=template_body,
+        self.client = Elasticsearch(
+            f"http://{ES_HOST}",
+            basic_auth=(ES_USER, ES_PASSWORD),
         )
-        print(f"Applied index template: {template_name}")
-    except Exception as exc:
-        print(f"Failed to apply template: {exc}")
+        self.template_name = "octoprobe_template"
 
-    actions = ({"_index": INDEX_NAME, "_source": document} for document in documents)
+    def close(self) -> None:
+        self.client.close()
 
-    try:
-        success, errors = bulk(
-            client=client,
-            actions=actions,
-            raise_on_error=False,
-            stats_only=False,
+    def delete_index(self) -> None:
+        if not ES_WRITE:
+            return
+
+        try:
+            self.client.indices.delete(index=INDEX_NAME, ignore_unavailable=True)
+            print(f"Deleted index: {INDEX_NAME}")
+        except Exception as exc:
+            print(f"Failed to delete index: {exc}")
+
+    def delete_index_template(self) -> None:
+        if not ES_WRITE:
+            return
+
+        try:
+            self.client.indices.delete_index_template(name=self.template_name)
+        except Exception as exc:
+            print(f"Failed to delete template: {exc}")
+
+        try:
+            self.client.indices.delete_index_template(name=INDEX_NAME)
+        except Exception as exc:
+            print(f"Failed to delete template: {exc}")
+
+    def apply_index_template(self) -> None:
+        template_path = Path(__file__).parent / "create_template.json"
+
+        try:
+            with template_path.open("r", encoding="utf-8") as f:
+                template_body = json.load(f)
+            self.client.indices.put_index_template(
+                name=self.template_name,
+                body=template_body,
+            )
+            print(f"Applied index template: {self.template_name}")
+        except Exception as exc:
+            print(f"Failed to apply template: {exc}")
+
+    def write_documents_one_by_one(self, documents: list[dict]) -> None:
+        if not ES_WRITE:
+            return
+
+        success = 0
+        failed = 0
+        for document in documents:
+            try:
+
+                def get_id(document: dict) -> str:
+                    for id_label in ("id_run", "id_group", "id_test"):
+                        id = document.get(id_label, None)
+                        if id is not None:
+                            return id
+                    raise ValueError(f"No id_label found in: {document}")
+
+                self.client.index(
+                    index=INDEX_NAME, document=document, id=get_id(document=document)
+                )
+                success += 1
+            except Exception as exc:
+                failed += 1
+                print(f"Failed to write document: {exc}")
+                print(f"Failed to write document: {document}")
+
+        print(f"Elastic upload {success}/{len(documents)}")
+        if failed:
+            print(f"Elastic upload failures: {failed}")
+
+    def write_documents(self, documents: list[dict]) -> None:
+        if not ES_WRITE:
+            return
+
+        actions = (
+            {"_index": INDEX_NAME, "_source": document} for document in documents
         )
-    except Exception as exc:
-        print(f"Elastic bulk write failed: {exc}")
-        return
 
-    failed = errors if isinstance(errors, int) else len(errors)
+        try:
+            success, errors = bulk(
+                client=self.client,
+                actions=actions,
+                raise_on_error=False,
+                stats_only=False,
+            )
+        except Exception as exc:
+            print(f"Elastic bulk write failed: {exc}")
+            return
 
-    print(f"Elastic upload {success}/{len(documents)}")
-    if failed:
-        print(f"Elastic upload failures: {failed}")
+        failed = errors if isinstance(errors, int) else len(errors)
+
+        print(f"Elastic upload {success}/{len(documents)}")
+        if failed:
+            print(f"Elastic upload failures: {failed}")
 
 
 def main() -> None:
@@ -191,7 +243,10 @@ def main() -> None:
     if directory_elastic.exists():
         shutil.rmtree(directory_elastic)
 
-    documents: list[dict] = []
+    el = Elastic()
+    el.delete_index()
+    el.delete_index_template()
+    el.apply_index_template()
 
     for directory_run in directory_reports.iterdir():
         if not directory_run.is_dir():
@@ -202,9 +257,9 @@ def main() -> None:
             directory_run=directory_run,
         )
         testrun.transform_run()
-        documents.extend(testrun.documents)
+        el.write_documents_one_by_one(testrun.documents)
 
-    write_elastic(documents)
+    el.close()
 
 
 if __name__ == "__main__":

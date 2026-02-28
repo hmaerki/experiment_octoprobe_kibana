@@ -1,0 +1,63 @@
+{
+  "index_patterns": ["octoprobe_*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "properties": {
+        "id_run": {
+          "type": "keyword"
+        },
+        "id_group": {
+          "type": "keyword"
+        },
+        "run_join": {
+          "type": "join",
+          "relations": {
+            "run": "group"
+          }
+        },
+        "testbed_name": {
+          "type": "keyword"
+        },
+        "testbed_instance": {
+          "type": "keyword"
+        },
+        "time_start": {
+          "type": "date",
+          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+        },
+        "time_end": {
+          "type": "date",
+          "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+        },
+        "directory_relative": {
+          "type": "keyword"
+        },
+        "testgroup": {
+          "type": "keyword"
+        },
+        "testid": {
+          "type": "keyword"
+        },
+        "tentacle_variant": {
+          "type": "keyword"
+        },
+        "tentacle_variant_role": {
+          "type": "keyword"
+        },
+        "commandline": {
+          "type": "text"
+        },
+        "tentacle_mcu": {
+          "type": "keyword"
+        },
+        "tentacle_reference": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}

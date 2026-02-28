@@ -1,0 +1,14 @@
+{
+    "directory_relative": "RUN-NATMODTESTS,a@1830-LOLIN_C3_MINI",
+    "testgroup": "RUN-NATMODTESTS",
+    "testid": "RUN-NATMODTESTS,a@1830-LOLIN_C3_MINI",
+    "tentacle_variant": "1830-LOLIN_C3_MINI",
+    "tentacle_variant_role": "1830-LOLIN_C3_MINI",
+    "commandline": "run-natmodtests.py",
+    "tentacle_mcu": "esp32",
+    "tentacle_reference": "",
+    "run_join": {
+        "name": "group",
+        "parent": "run_001"
+    }
+}
