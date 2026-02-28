@@ -22,7 +22,7 @@ import shutil
 from pathlib import Path
 import typing
 
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, helpers
 
 PREFIX_RUN = "r_"
 PREFIX_GROUP = "g_"
@@ -34,25 +34,60 @@ ES_PASSWORD = "91AwngFy"
 INDEX_NAME = "octoprobe_a"
 
 ES_WRITE = True
+INHERIT_PARENT_PROPERTIES = True
 
 ID_DELIMITER = " | "
-JOIN_MULTIPLE = "join_multiple"
+JOIN_MULTIPLE = "id_join_multiple"
 
 
 @dataclasses.dataclass(frozen=True)
 class Document:
+    prefix: str
     id_name: str
     id: str
-    parent_document: typing.Self | None
+    parent: typing.Self | None
     dict_doc: dict[str, str | int | dict]
 
     def __post_init__(self) -> None:
+        assert isinstance(self.prefix, str), self.prefix
+        assert isinstance(self.id_name, str), self.id_name
         assert isinstance(self.id, str), self.id
         assert self.id.find("/") == -1, f"id='{self.id}' should not contain a '/'!"
-        assert isinstance(self.parent_document, Document | None), self.id
+        assert isinstance(self.parent, Document | None), self.id
         assert isinstance(self.dict_doc, dict), self.dict_doc
-        if self.parent_document is not None:
-            assert self.id != self.parent_document.id, f"Expected: {self.id=} != {self.parent_document.id=}"
+        if self.parent is not None:
+            assert self.id != self.parent.id, (
+                f"Expected: {self.id=} != {self.parent.id=}"
+            )
+
+        self.apply_prefix()
+
+        assert self.id_name not in self.dict_doc
+        self.dict_doc[self.id_name] = self.id
+
+        assert JOIN_MULTIPLE not in self.dict_doc
+        dict_join = {"name": self.id_name}
+        if self.parent is not None:
+            dict_join["parent"] = self.parent.id
+        self.dict_doc[JOIN_MULTIPLE] = dict_join
+
+        if not INHERIT_PARENT_PROPERTIES:
+            return
+
+        parent = self.parent
+        while parent is not None:
+            for k, v in parent.dict_doc.items():
+                if k.startswith(parent.prefix):
+                    self.dict_doc[k] = v
+            self.dict_doc.update(parent.dict_doc)
+            parent = parent.parent
+
+    def apply_prefix(self) -> None:
+        keys = list(self.dict_doc)
+        for k in keys:
+            self.dict_doc[self.prefix + k] = self.dict_doc[k]
+        for k in keys:
+            del self.dict_doc[k]
 
 
 @dataclasses.dataclass(frozen=True)
@@ -62,11 +97,7 @@ class Testgroup:
     directory_run: Path
     documents: list[Document] = dataclasses.field(default_factory=list)
 
-    @staticmethod
-    def prefix(doc_json: dict[str, Any], label: str) -> dict[str, Any]:
-        return {f"{label}{k}": v for k, v in doc_json.items()}
-
-    def read_json(self, path: Path) -> dict[str, Any]:
+    def read_json(self, path: Path) -> dict[str, typing.Any]:
         with path.open("r", encoding="utf-8") as handle:
             return json.load(handle)
 
@@ -92,37 +123,30 @@ class Testgroup:
             raise FileNotFoundError(f"Missing testrun file: {filename_run}")
 
         dict_run = self.read_json(filename_run)
-        dict_run = self.prefix(doc_json=dict_run, label=PREFIX_RUN)
-        id_run = dict_run[PREFIX_RUN + "time_start"]
-        # "id_run": "run_001",
-        # "join_run_group": {
-        #     "name": "run"
-        # }
-        dict_run["id_run"] = id_run
-        dict_run[JOIN_MULTIPLE] = {"name": "run"}
-        run_document = Document(
+        id_run = dict_run["time_start"]
+        run_doc = Document(
+            prefix=PREFIX_RUN,
             id_name="id_run",
             id=id_run,
-            parent_document=None,
+            parent=None,
             dict_doc=dict_run,
         )
-
         self.write_json(
             filename_json=filename_run,
-            document=run_document,
+            document=run_doc,
         )
 
         for directory_testgroup in self.directory_run.iterdir():
             self.transform_group(
                 directory_testgroup=directory_testgroup,
-                parent_run=run_document,
+                run_doc=run_doc,
                 id_run=id_run,
             )
 
     def transform_group(
         self,
         directory_testgroup: Path,
-        parent_run: Document,
+        run_doc: Document,
         id_run: str,
     ) -> None:
         if not directory_testgroup.is_dir():
@@ -131,51 +155,32 @@ class Testgroup:
         if not filename_group.is_file():
             return
         dict_group = self.read_json(filename_group)
-        dict_group = self.prefix(doc_json=dict_group, label=PREFIX_GROUP)
+        outcomes = dict_group["outcomes"]
+        del dict_group["outcomes"]
+        id_group = id_run + ID_DELIMITER + dict_group["testid"]
 
-        outcomes = dict_group[PREFIX_GROUP + "outcomes"]
-        del dict_group[PREFIX_GROUP + "outcomes"]
-
-        # id_group = f"{run_json[PREFIX_RUN + 'time_start']}_{dict_group[PREFIX_GROUP + 'testid']}"
-        id_group = id_run + ID_DELIMITER + dict_group[PREFIX_GROUP + "testid"]
-        dict_group["id_group"] = id_group
-        # "join_run_group": {
-        #     "name": "group",
-        #     "parent": "run_001"
-        # }
-        dict_group[JOIN_MULTIPLE] = {"name": "group", "parent": id_run}
-        group_document = Document(
+        group_doc = Document(
+            prefix=PREFIX_GROUP,
             id_name="id_group",
             id=id_group,
-            parent_document=parent_run,
+            parent=run_doc,
             dict_doc=dict_group,
         )
-        self.write_json(
-            filename_group,
-            document=Document(
-                id_name="id_group",
-                id=id_group,
-                parent_document=parent_run,
-                dict_doc=dict_group,
-            ),
-        )
+        self.write_json(filename_group, document=group_doc)
 
         for index, dict_outcome in enumerate(outcomes, start=1):
             test_name = dict_outcome["name"].replace("/", "-")
             id_test = id_group + ID_DELIMITER + test_name
-            dict_outcome = self.prefix(doc_json=dict_outcome, label=PREFIX_TEST)
-            # dict_outcome.update(dict_id)
-            # dict_outcome["join_run_test"] = {"name": "test", "parent": id_run}
-            dict_outcome[JOIN_MULTIPLE] = {"name": "test", "parent": id_group}
-            filename_outcome = directory_testgroup / f"testgroup_{index}.json"
+            test_doc = Document(
+                prefix=PREFIX_TEST,
+                id_name="id_test",
+                id=id_test,
+                parent=group_doc,
+                dict_doc=dict_outcome,
+            )
             self.write_json(
-                filename_outcome,
-                document=Document(
-                    id_name="id_test",
-                    id=id_test,
-                    parent_document=group_document,
-                    dict_doc=dict_outcome,
-                ),
+                filename_json=directory_testgroup / f"testgroup_{index}.json",
+                document=test_doc,
             )
 
 
@@ -242,16 +247,9 @@ class Elastic:
         for document in documents:
             assert isinstance(document, Document)
             try:
-                # Extract routing from join field if it's a child document
-                # routing = None
-                # if JOIN_MULTIPLE in document.dict_doc:
-                #     join_field = document.dict_doc[JOIN_MULTIPLE]
-                #     if isinstance(join_field, dict) and "parent" in join_field:
-                #         routing = join_field["parent"]
-
                 routing = None
-                if document.parent_document is not None:
-                    routing = document.parent_document.id
+                if document.parent is not None:
+                    routing = document.parent.id
                 self.client.index(
                     index=INDEX_NAME,
                     document=document.dict_doc,
@@ -262,6 +260,32 @@ class Elastic:
             except Exception as exc:
                 failed += 1
                 print(f"Failed to write document:\n{document}\n\n{exc}")
+
+        print(f"Elastic upload {success}/{len(documents)}")
+        if failed:
+            print(f"Elastic upload failures: {failed}")
+
+    def write_documents_bulk(self, documents: list[Document]) -> None:
+        if not ES_WRITE:
+            return
+
+        actions = (
+            {"_index": INDEX_NAME, "_source": document.dict_doc, "_id": document.id}
+            for document in documents
+        )
+
+        try:
+            success, errors = helpers.bulk(
+                client=self.client,
+                actions=actions,
+                raise_on_error=False,
+                stats_only=False,
+            )
+        except Exception as exc:
+            print(f"Elastic bulk write failed: {exc}")
+            return
+
+        failed = errors if isinstance(errors, int) else len(errors)
 
         print(f"Elastic upload {success}/{len(documents)}")
         if failed:
@@ -288,7 +312,8 @@ def main() -> None:
             directory_run=directory_run,
         )
         testrun.transform_run()
-        el.write_documents_one_by_one(testrun.documents)
+        el.write_documents_bulk(testrun.documents)
+        # el.write_documents_one_by_one(testrun.documents)
 
     el.close()
 

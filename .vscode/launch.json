@@ -14,6 +14,15 @@
             "justMyCode": false,
         },
         {
+            "name": "run_transform.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "run_transform.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/2026-02-27_sample_data/A"
+        },
+        {
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",

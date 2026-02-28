@@ -18,11 +18,11 @@
                 "id_test": {
                     "type": "keyword"
                 },
-                "join_multiple": {
+                "id_join_multiple": {
                     "type": "join",
                     "relations": {
-                        "run": "group",
-                        "group": "test"
+                        "id_run": "id_group",
+                        "if_group": "id_test"
                     }
                 },
                 "r_testbed_name": {
@@ -55,11 +55,33 @@
                 },
                 "r_ref_firmware_metadata": {
                     "type": "object",
-                    "enabled": true
+                    "enabled": true,
+                    "properties": {
+                        "commit_hash": {
+                            "type": "keyword"
+                        },
+                        "git_spec": {
+                            "type": "keyword"
+                        },
+                        "url_link": {
+                            "type": "keyword"
+                        }
+                    }
                 },
                 "r_ref_tests_metadata": {
                     "type": "object",
-                    "enabled": true
+                    "enabled": true,
+                    "properties": {
+                        "commit_hash": {
+                            "type": "keyword"
+                        },
+                        "git_spec": {
+                            "type": "keyword"
+                        },
+                        "url_link": {
+                            "type": "keyword"
+                        }
+                    }
                 },
                 "r_trigger": {
                     "type": "text"
