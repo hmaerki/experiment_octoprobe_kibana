@@ -16,6 +16,7 @@ Build the hierarchy:
 
 from __future__ import annotations
 
+import os
 import dataclasses
 import json
 import shutil
@@ -28,19 +29,16 @@ PREFIX_RUN = "r_"
 PREFIX_GROUP = "g_"
 PREFIX_TEST = "t_"
 
-if False:
-    ES_HOST = "localhost:9200"
-    ES_USER = "elastic"
-    ES_PASSWORD = "91AwngFy"
-else:
-    ES_HOST = "reports.octoprobe.org:9200"
-    ES_USER = "elastic"
-    ES_PASSWORD = "xxx"
+ENV_PREFIX = "REMOTE_"
+ENV_PREFIX = "LOCAL_"
+ES_HOST = os.environ[ENV_PREFIX + "ES_HOST"]
+ES_USER = os.environ[ENV_PREFIX + "ES_USER"]
+ES_PASSWORD = os.environ[ENV_PREFIX + "ES_PASSWORD"]
 
 INDEX_NAME = "octoprobe_a"
 
 ES_WRITE = True
-WRITE_JSON_FILES = False
+WRITE_JSON_FILES = True
 INHERIT_PARENT_PROPERTIES = True
 
 ID_DELIMITER = " | "
@@ -90,7 +88,7 @@ class Document:
             for k, v in parent.dict_doc.items():
                 if k.startswith(parent.prefix):
                     self.dict_doc[k] = v
-            self.dict_doc.update(parent.dict_doc)
+            # self.dict_doc.update(parent.dict_doc)
             parent = parent.parent
 
     def apply_prefix(self) -> None:
@@ -172,6 +170,14 @@ class Testgroup:
         dict_group = self.read_json(filename_group)
         outcomes = dict_group["outcomes"]
         del dict_group["outcomes"]
+        dict_group["msg_error_count_extension"] = 1 if "msg_error" != "" else 0
+        dict_group["msg_skipped_count_extension"] = 1 if "msg_skipped" != "" else 0
+        tentacle_variant = dict_group["tentacle_variant"]
+        # tentacle_variant: "2d2d-LOLIN_D1_MINI-FLASH_512K"
+        tentacle_list = tentacle_variant.split("-")
+        dict_group["tentacle_serial_extension"] = tentacle_list[0]
+        dict_group["tentacle_spec_extension"] = tentacle_list[1]
+        dict_group["tentacle_firmware_variant_extension"] = "" if len(tentacle_list) <3 else tentacle_list[2]
         id_group = id_run + ID_DELIMITER + dict_group["testid"]
 
         group_doc = Document(

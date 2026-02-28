@@ -143,6 +143,12 @@
                 "g_msg_skipped": {
                     "type": "text"
                 },
+                "g_msg_error_count": {
+                    "type": "integer"
+                },
+                "g_msg_skipped_count": {
+                    "type": "integer"
+                },
                 "t_name": {
                     "type": "keyword"
                 },
