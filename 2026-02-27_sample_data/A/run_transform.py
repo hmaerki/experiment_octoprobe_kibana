@@ -30,7 +30,7 @@ PREFIX_GROUP = "g_"
 PREFIX_TEST = "t_"
 
 ENV_PREFIX = "REMOTE_"
-ENV_PREFIX = "LOCAL_"
+# ENV_PREFIX = "LOCAL_"
 ES_HOST = os.environ[ENV_PREFIX + "ES_HOST"]
 ES_USER = os.environ[ENV_PREFIX + "ES_USER"]
 ES_PASSWORD = os.environ[ENV_PREFIX + "ES_PASSWORD"]
@@ -327,7 +327,7 @@ def main() -> None:
     el.delete_index_template()
     el.apply_index_template()
 
-    for directory_run in directory_reports.iterdir():
+    for directory_run in sorted(directory_reports.iterdir(), reverse=True):
         print(f"*** {directory_run}")
         if not directory_run.is_dir():
             continue
@@ -337,8 +337,8 @@ def main() -> None:
             directory_run=directory_run,
         )
         testrun.transform_run()
-        el.write_documents_bulk(testrun.documents)
-        # el.write_documents_one_by_one(testrun.documents)
+        # el.write_documents_bulk(testrun.documents)
+        el.write_documents_one_by_one(testrun.documents)
 
     el.close()
 

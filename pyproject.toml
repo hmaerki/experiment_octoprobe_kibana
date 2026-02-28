@@ -10,7 +10,7 @@ dependencies = [
 xfail_strict=true
 elasticsearch_host="127.0.0.1"
 # elasticsearch_port="9200"
-elasticsearch_api_key="eVh3ZGtKd0JNc2JWczlKdGx3c0E6QWdJMXVsYzl4bDZOZkc2RmJTV3YxZw=="
+elasticsearch_api_key="xxxx"
 
 
 # addopts = ["--showlocals", "--verbose"]
