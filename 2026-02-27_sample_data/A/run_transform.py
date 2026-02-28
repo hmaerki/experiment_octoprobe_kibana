@@ -20,7 +20,7 @@ import dataclasses
 import json
 import shutil
 from pathlib import Path
-from typing import Any
+import typing
 
 from elasticsearch import Elasticsearch
 
@@ -43,12 +43,13 @@ JOIN_MULTIPLE = "join_multiple"
 class Document:
     id_name: str
     id: str
-    parent_id: str | None
-    dict_doc: dict[str, Any]
+    parent_document: typing.Self | None
+    dict_doc: dict[str, str | int | dict]
 
     def __post_init__(self) -> None:
         assert isinstance(self.id, str), id
         assert self.id.find("/") == -1, f"id='{id}' should not contain a '/'!"
+        assert isinstance(self.parent_document, Document | None), id
 
 
 @dataclasses.dataclass(frozen=True)
@@ -96,27 +97,29 @@ class Testgroup:
         # }
         dict_run["id_run"] = id_run
         dict_run[JOIN_MULTIPLE] = {"name": "run"}
+        run_document = Document(
+            id_name="id_run",
+            id=id_run,
+            parent_document=None,
+            dict_doc=dict_run,
+        )
+
         self.write_json(
             filename_json=filename_run,
-            document=Document(
-                id_name="id_run",
-                id=id_run,
-                parent_id=None,
-                dict_doc=dict_run,
-            ),
+            document=run_document,
         )
 
         for directory_testgroup in self.directory_run.iterdir():
             self.transform_group(
                 directory_testgroup=directory_testgroup,
-                run_json=dict_run,
+                parent_run=run_document,
                 id_run=id_run,
             )
 
     def transform_group(
         self,
         directory_testgroup: Path,
-        run_json: dict[str, Any],
+        parent_run: Document,
         id_run: str,
     ) -> None:
         if not directory_testgroup.is_dir():
@@ -138,12 +141,18 @@ class Testgroup:
         #     "parent": "run_001"
         # }
         dict_group[JOIN_MULTIPLE] = {"name": "group", "parent": id_run}
+        group_document=Document(
+                id_name="id_group",
+                id=id_group,
+                parent_document=parent_run,
+                dict_doc=dict_group,
+            )
         self.write_json(
             filename_group,
             document=Document(
                 id_name="id_group",
                 id=id_group,
-                parent_id=id_run,
+                parent_document=group_document,
                 dict_doc=dict_group,
             ),
         )
@@ -161,7 +170,7 @@ class Testgroup:
                 document=Document(
                     id_name="id_test",
                     id=id_test,
-                    parent_id=id_group,
+                    parent_document=group_document,
                     dict_doc=dict_outcome,
                 ),
             )
