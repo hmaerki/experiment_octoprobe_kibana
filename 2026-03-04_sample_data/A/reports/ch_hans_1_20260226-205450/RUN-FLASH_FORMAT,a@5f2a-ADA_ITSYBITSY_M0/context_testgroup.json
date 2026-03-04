@@ -1,0 +1,22 @@
+{
+    "directory_relative": "RUN-FLASH_FORMAT,a@5f2a-ADA_ITSYBITSY_M0",
+    "testgroup": "RUN-FLASH_FORMAT",
+    "testid": "RUN-FLASH_FORMAT,a@5f2a-ADA_ITSYBITSY_M0",
+    "tentacle_variant": "5f2a-ADA_ITSYBITSY_M0",
+    "tentacle_variant_role": "5f2a-ADA_ITSYBITSY_M0",
+    "commandline": "format_flash",
+    "tentacle_mcu": "samd",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_21-28-18-CET",
+    "time_end": "2026-02-26_21-29-05-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-FLASH_FORMAT,a@5f2a-ADA_ITSYBITSY_M0/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "format_flash",
+            "outcome": "skipped",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

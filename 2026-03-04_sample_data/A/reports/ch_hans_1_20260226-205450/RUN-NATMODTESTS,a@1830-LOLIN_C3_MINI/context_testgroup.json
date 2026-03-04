@@ -1,0 +1,217 @@
+{
+    "directory_relative": "RUN-NATMODTESTS,a@1830-LOLIN_C3_MINI",
+    "testgroup": "RUN-NATMODTESTS",
+    "testid": "RUN-NATMODTESTS,a@1830-LOLIN_C3_MINI",
+    "tentacle_variant": "1830-LOLIN_C3_MINI",
+    "tentacle_variant_role": "1830-LOLIN_C3_MINI",
+    "commandline": "run-natmodtests.py",
+    "tentacle_mcu": "esp32",
+    "tentacle_reference": "",
+    "time_start": "2026-02-27_01-14-24-CET",
+    "time_end": "2026-02-27_01-14-36-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-NATMODTESTS,a@1830-LOLIN_C3_MINI/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "extmod/re_sub_unmatched.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod/btree_error.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf_scroll.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_sub.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf_ellipse.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_split.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_span.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/btree_gc.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf8.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_limit.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf16.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_namedclass.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/btree1.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_debug.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf1.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_groups.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf_subclass.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_error.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/deflate_stream_error.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/heapq1.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf2.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_start_end_pos.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_split_empty.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/random_seed_default.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf_blit.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/random_extra.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/deflate_compress.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf_polygon.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_split_notimpl.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf4.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/random_extra_float.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod/re1.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/random_basic.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf_bounds.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/btree_closed.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/deflate_compress_memory_error.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/framebuf_palette.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_group.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/re_stack_overflow.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod/deflate_decompress.py",
+            "outcome": "passed",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

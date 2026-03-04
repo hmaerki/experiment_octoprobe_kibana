@@ -1,0 +1,52 @@
+{
+    "directory_relative": "RUN-TESTS_EXTMOD_HARDWARE,b@552b-RPI_PICO2_W",
+    "testgroup": "RUN-TESTS_EXTMOD_HARDWARE",
+    "testid": "RUN-TESTS_EXTMOD_HARDWARE,b@552b-RPI_PICO2_W",
+    "tentacle_variant": "552b-RPI_PICO2_W",
+    "tentacle_variant_role": "552b-RPI_PICO2_W",
+    "commandline": "run-tests.py --test-dirs=extmod_hardware",
+    "tentacle_mcu": "rp2",
+    "tentacle_reference": "",
+    "time_start": "2026-02-27_02-09-13-CET",
+    "time_end": "2026-02-27_02-09-21-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-TESTS_EXTMOD_HARDWARE,b@552b-RPI_PICO2_W/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "extmod_hardware/machine_counter.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_encoder.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_i2c_target.py",
+            "outcome": "failed",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_pwm.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_uart_irq_break.py",
+            "outcome": "passed",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_uart_irq_rx.py",
+            "outcome": "skipped",
+            "text": ""
+        },
+        {
+            "name": "extmod_hardware/machine_uart_irq_rxidle.py",
+            "outcome": "passed",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

@@ -1,0 +1,16 @@
+{
+    "directory_relative": "RUN-PERFBENCH,a@472b-ESP32_S3_DEVKIT",
+    "testgroup": "RUN-PERFBENCH",
+    "testid": "RUN-PERFBENCH,a@472b-ESP32_S3_DEVKIT",
+    "tentacle_variant": "472b-ESP32_S3_DEVKIT",
+    "tentacle_variant_role": "472b-ESP32_S3_DEVKIT",
+    "commandline": "run-perfbench.py",
+    "tentacle_mcu": "esp32",
+    "tentacle_reference": "",
+    "time_start": "2026-02-27_01-39-50-CET",
+    "time_end": "2026-02-27_01-40-04-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-PERFBENCH,a@472b-ESP32_S3_DEVKIT/logger_20_info.log",
+    "outcomes": [],
+    "msg_error": "RUN-PERFBENCH,a@472b-ESP32_S3_DEVKIT: Terminating test due to: SubprocessExitCodeException('EXEC failed with returncode=2: /home/githubrunner/testbed_micropython/.venv/bin/python3 run-perfbench.py --result-dir=/home/githubrunner/testbed_micropython/testresults/RUN-PERFBENCH,a@472b-ESP32_S3_DEVKIT --test-instance=port:/dev/ttyACM5 100 100\\nlogfile=/home/githubrunner/testbed_micropython/testresults/RUN-PERFBENCH,a@472b-ESP32_S3_DEVKIT/testresults.txt')",
+    "msg_skipped": ""
+}

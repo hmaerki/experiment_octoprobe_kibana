@@ -1,0 +1,16 @@
+{
+    "directory_relative": "RUN-TESTS_STANDARD_NATIVE,b@3a21-PYBV11-THREAD",
+    "testgroup": "RUN-TESTS_STANDARD_NATIVE",
+    "testid": "RUN-TESTS_STANDARD_NATIVE,b@3a21-PYBV11-THREAD",
+    "tentacle_variant": "3a21-PYBV11-THREAD",
+    "tentacle_variant_role": "3a21-PYBV11-THREAD",
+    "commandline": "run-tests.py --via-mpy --emit native",
+    "tentacle_mcu": "stm32",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_21-46-14-CET",
+    "time_end": "2026-02-26_21-49-44-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-TESTS_STANDARD_NATIVE,b@3a21-PYBV11-THREAD/logger_20_info.log",
+    "outcomes": [],
+    "msg_error": "",
+    "msg_skipped": ""
+}

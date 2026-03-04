@@ -32,7 +32,6 @@ WRITE_JSON_FILES = True
 class Document:
     id_name: str | None
     id: str | None
-    timestamp: str
     parent: typing.Self | None
     dict_doc: dict[str, str | int | dict]
 
@@ -41,15 +40,12 @@ class Document:
         assert isinstance(self.id, str | None), self.id
         if self.id is not None:
             assert self.id.find("/") == -1, f"id='{self.id}' should not contain a '/'!"
-        assert isinstance(self.timestamp, str), self.timestamp
         assert isinstance(self.parent, Document | None), self.id
         assert isinstance(self.dict_doc, dict), self.dict_doc
         if self.parent is not None:
             assert self.id != self.parent.id, (
                 f"Expected: {self.id=} != {self.parent.id=}"
             )
-
-        self.dict_doc["@timestamp"] = self.timestamp
 
         if (self.id_name is not None) and( self.id is not None):
             assert self.id_name not in self.dict_doc
@@ -103,7 +99,6 @@ class Testgroup:
         run_doc = Document(
             id_name="id_run",
             id=id_run,
-            timestamp=dict_run["time_start"],
             parent=None,
             dict_doc=dict_run,
         )
@@ -149,7 +144,6 @@ class Testgroup:
         group_doc = Document(
             id_name="id_group",
             id=id_group,
-            timestamp=dict_group["time_start"],
             parent=run_doc,
             dict_doc=dict_group,
         )
@@ -160,7 +154,6 @@ class Testgroup:
             test_doc = Document(
                 id_name=None,
                 id=None,
-                timestamp=group_doc.timestamp,
                 parent=group_doc,
                 dict_doc=dict_outcome,
             )
