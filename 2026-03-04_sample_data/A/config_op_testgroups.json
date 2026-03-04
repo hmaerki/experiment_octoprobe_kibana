@@ -4,15 +4,33 @@
   },
   "mappings": {
     "properties": {
-      "testgroup_id":    { "type": "keyword" },
-      "testrun_id":      { "type": "keyword" },
-      "testgroup":       { "type": "keyword" },
-      "tentacle":        { "type": "keyword" },
-      "testid":          { "type": "keyword" },
-      "commandline":     { "type": "keyword" },
-      "tentacle_mcu":    { "type": "keyword" },
-      "group_time_start": { "type": "date" },
-      "group_time_end":   { "type": "date" }
+      "id_test": {
+        "type": "keyword"
+      },
+      "id_group": {
+        "type": "keyword"
+      },
+      "testgroup": {
+        "type": "keyword"
+      },
+      "tentacle": {
+        "type": "keyword"
+      },
+      "testid": {
+        "type": "keyword"
+      },
+      "commandline": {
+        "type": "keyword"
+      },
+      "tentacle_mcu": {
+        "type": "keyword"
+      },
+      "group_time_start": {
+        "type": "date"
+      },
+      "group_time_end": {
+        "type": "date"
+      }
     }
   }
 }

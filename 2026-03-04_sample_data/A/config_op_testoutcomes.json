@@ -2,7 +2,13 @@
   "settings": {},
   "mappings": {
     "properties": {
-      "testgroup_id": {
+      "id_run": {
+        "type": "keyword"
+      },
+      "id_group": {
+        "type": "keyword"
+      },
+      "id_test": {
         "type": "keyword"
       },
       "test_name": {

@@ -4,12 +4,24 @@
   },
   "mappings": {
     "properties": {
-      "testrun_id":       { "type": "keyword" },
-      "testbed_name":     { "type": "keyword" },
-      "testbed_instance": { "type": "keyword" },
-      "run_time_start":   { "type": "date" },
-      "run_time_end":     { "type": "date" },
-      "ref_firmware":     { "type": "keyword" }
+      "id_run": {
+        "type": "keyword"
+      },
+      "testbed_name": {
+        "type": "keyword"
+      },
+      "testbed_instance": {
+        "type": "keyword"
+      },
+      "run_time_start": {
+        "type": "date"
+      },
+      "run_time_end": {
+        "type": "date"
+      },
+      "ref_firmware": {
+        "type": "keyword"
+      }
     }
   }
 }
