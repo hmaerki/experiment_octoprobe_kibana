@@ -13,14 +13,80 @@
       "testbed_instance": {
         "type": "keyword"
       },
-      "run_time_start": {
-        "type": "date"
+      "time_start": {
+        "type": "date",
+        "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
       },
-      "run_time_end": {
-        "type": "date"
+      "time_end": {
+        "type": "date",
+        "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+      },
+      "g_time_start": {
+        "type": "date",
+        "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+      },
+      "g_time_end": {
+        "type": "date",
+        "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
       },
       "ref_firmware": {
         "type": "keyword"
+      },
+      "ref_tests": {
+        "type": "keyword"
+      },
+      "ref_firmware_metadata": {
+        "type": "object",
+        "enabled": true,
+        "properties": {
+          "commit_hash": {
+            "type": "keyword"
+          },
+          "git_spec": {
+            "type": "keyword"
+          },
+          "url_link": {
+            "type": "keyword"
+          }
+        }
+      },
+      "ref_tests_metadata": {
+        "type": "object",
+        "enabled": true,
+        "properties": {
+          "commit_hash": {
+            "type": "keyword"
+          },
+          "git_spec": {
+            "type": "keyword"
+          },
+          "url_link": {
+            "type": "keyword"
+          }
+        }
+      },
+      "trigger": {
+        "type": "text"
+      },
+      "commandline": {
+        "type": "text"
+      },
+      "log_output": {
+        "type": "keyword"
+      },
+      "log_directory": {
+        "type": "keyword"
+      },
+      "error": {
+        "type": "text"
+      },
+      "directories": {
+        "type": "object",
+        "enabled": true
+      },
+      "git_ref": {
+        "type": "object",
+        "enabled": true
       }
     }
   }

@@ -13,23 +13,49 @@
       "testgroup": {
         "type": "keyword"
       },
-      "tentacle": {
+      "tentacle_mcu": {
+        "type": "keyword"
+      },
+      "time_start": {
+        "type": "date",
+        "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+      },
+      "time_end": {
+        "type": "date",
+        "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+      },
+      "directory_relative": {
         "type": "keyword"
       },
       "testid": {
         "type": "keyword"
       },
+      "tentacle_variant": {
+        "type": "keyword"
+      },
+      "tentacle_variant_role": {
+        "type": "keyword"
+      },
       "commandline": {
+        "type": "text"
+      },
+      "tentacle_reference": {
         "type": "keyword"
       },
-      "tentacle_mcu": {
+      "log_output": {
         "type": "keyword"
       },
-      "group_time_start": {
-        "type": "date"
+      "msg_error": {
+        "type": "text"
       },
-      "group_time_end": {
-        "type": "date"
+      "msg_skipped": {
+        "type": "text"
+      },
+      "msg_error_count": {
+        "type": "integer"
+      },
+      "msg_skipped_count": {
+        "type": "integer"
       }
     }
   }

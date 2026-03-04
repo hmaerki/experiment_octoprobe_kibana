@@ -30,16 +30,17 @@ WRITE_JSON_FILES = True
 
 @dataclasses.dataclass(frozen=True)
 class Document:
-    id_name: str
-    id: str
+    id_name: str | None
+    id: str | None
     timestamp: str
     parent: typing.Self | None
     dict_doc: dict[str, str | int | dict]
 
     def __post_init__(self) -> None:
-        assert isinstance(self.id_name, str), self.id_name
-        assert isinstance(self.id, str), self.id
-        assert self.id.find("/") == -1, f"id='{self.id}' should not contain a '/'!"
+        assert isinstance(self.id_name, str | None), self.id_name
+        assert isinstance(self.id, str | None), self.id
+        if self.id is not None:
+            assert self.id.find("/") == -1, f"id='{self.id}' should not contain a '/'!"
         assert isinstance(self.timestamp, str), self.timestamp
         assert isinstance(self.parent, Document | None), self.id
         assert isinstance(self.dict_doc, dict), self.dict_doc
@@ -50,14 +51,16 @@ class Document:
 
         self.dict_doc["@timestamp"] = self.timestamp
 
-        assert self.id_name not in self.dict_doc
-        self.dict_doc[self.id_name] = self.id
+        if (self.id_name is not None) and( self.id is not None):
+            assert self.id_name not in self.dict_doc
+            self.dict_doc[self.id_name] = self.id
 
-        parent = self.parent
-        while parent is not None:
-            assert parent.id_name not in self.dict_doc
-            self.dict_doc[parent.id_name] = parent.id
-            parent = parent.parent
+        if self.parent is not None:
+            assert self.parent.id is not None
+            assert self.parent.id_name is not None
+            assert self.parent.id_name not in self.dict_doc
+            self.dict_doc[self.parent.id_name] = self.parent.id
+
 
 
 @dataclasses.dataclass(frozen=True)
@@ -154,11 +157,9 @@ class Testgroup:
         self.testgroup_docs.append(group_doc)
 
         for index, dict_outcome in enumerate(outcomes, start=1):
-            test_name = dict_outcome["name"].replace("/", "-")
-            id_test = id_group + ID_DELIMITER + test_name
             test_doc = Document(
-                id_name="id_test",
-                id=id_test,
+                id_name=None,
+                id=None,
                 timestamp=group_doc.timestamp,
                 parent=group_doc,
                 dict_doc=dict_outcome,
@@ -200,12 +201,12 @@ class Elastic:
             return
 
         for index_name in INDEX_NAMES:
-            filename_mapping = (
+            filename_config = (
                 pathlib.Path(__file__).parent / f"config_{index_name}.json"
             )
 
             try:
-                with filename_mapping.open("r", encoding="utf-8") as f:
+                with filename_config.open("r", encoding="utf-8") as f:
                     config = json.load(f)
                 self.client.indices.create(
                     index=index_name,
@@ -214,7 +215,7 @@ class Elastic:
                 )
                 print(f"Create index {index_name}")
             except Exception as exc:
-                print(f"Failed to apply template: {exc}")
+                print(f"Failed to apply file '{filename_config}':  {exc}")
                 raise
 
     def write_documents_one_by_one(
