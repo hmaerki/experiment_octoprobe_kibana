@@ -218,7 +218,9 @@ class Elastic:
                 raise
 
     def write_documents_one_by_one(
-        self, index_name: str, documents: list[Document]
+        self,
+        index_name: str,
+        documents: list[Document],
     ) -> None:
         if not ES_WRITE:
             return
@@ -246,13 +248,17 @@ class Elastic:
         if failed:
             print(f"Elastic upload failures: {failed}")
 
-    def write_documents_bulk(self, documents: list[Document]) -> None:
+    def write_documents_bulk(
+        self,
+        index_name: str,
+        documents: list[Document],
+    ) -> None:
         if not ES_WRITE:
             return
 
         actions = (
             {
-                "_index": INDEX_NAME_TESTRUNS,
+                "_index": index_name,
                 "_source": document.dict_doc,
                 "_id": document.id,
             }
@@ -298,10 +304,11 @@ def main() -> None:
             directory_run=directory_run,
         )
         testrun.transform_run()
-        # el.write_documents_bulk(testrun.documents)
-        el.write_documents_one_by_one(INDEX_NAME_TESTRUNS, testrun.testrun_docs)
-        el.write_documents_one_by_one(INDEX_NAME_TESTGROUPS, testrun.testgroup_docs)
-        el.write_documents_one_by_one(INDEX_NAME_TESTOUTCOMES, testrun.testoutcome_docs)
+        f = el.write_documents_one_by_one
+        f = el.write_documents_bulk
+        f(INDEX_NAME_TESTRUNS, testrun.testrun_docs)
+        f(INDEX_NAME_TESTGROUPS, testrun.testgroup_docs)
+        f(INDEX_NAME_TESTOUTCOMES, testrun.testoutcome_docs)
 
     el.close()
 

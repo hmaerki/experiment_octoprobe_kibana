@@ -14,13 +14,16 @@ FROM op_testoutcomes
 | LIMIT 1000
 """
 
-QUERY_OUTCOMES= """
+QUERY_OUTCOMES = """
 FROM test-outcomes
 | LOOKUP JOIN testgroups ON testgroup_id
 | WHERE testgroup == "RUN-PERFBENCH"
 | KEEP test_name, tentacle, outcome
 | SORT test_name, tentacle
-  """
+| LIMIT 1000
+"""
+
+
 def main() -> None:
     client = run_transform.Elastic()
 
