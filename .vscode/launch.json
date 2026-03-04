@@ -14,7 +14,25 @@
             "justMyCode": false,
         },
         {
-            "name": "run_transform.py",
+            "name": "03-04 run_transform.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/2026-03-04_sample_data/A/run_transform.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/2026-03-04_sample_data/A"
+        },
+        {
+            "name": "03-04 run_transform.py (reports)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/2026-03-04_sample_data/A/run_transform.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "/home/maerki/work_octoprobe/testbed_micropython_reports"
+        },
+        {
+            "name": "02-27 run_transform.py",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/2026-02-27_sample_data/A/run_transform.py",
@@ -23,7 +41,7 @@
             "cwd": "${workspaceFolder}/2026-02-27_sample_data/A"
         },
         {
-            "name": "run_transform.py (reports)",
+            "name": "02-27 run_transform.py (reports)",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/2026-02-27_sample_data/A/run_transform.py",

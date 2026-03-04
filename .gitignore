@@ -2,3 +2,5 @@
 **/__pycache__/
 2026-02-27_sample_data/A/reports/**
 2026-02-27_sample_data/A/elastic/**
+2026-03-04_sample_data/A/elastic/**
+.vscode/launch.json

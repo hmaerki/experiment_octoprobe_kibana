@@ -1,0 +1,19 @@
+{
+  "settings": {},
+  "mappings": {
+    "properties": {
+      "testgroup_id": {
+        "type": "keyword"
+      },
+      "test_name": {
+        "type": "keyword"
+      },
+      "outcome": {
+        "type": "keyword"
+      },
+      "text": {
+        "type": "text"
+      }
+    }
+  }
+}
