@@ -1,0 +1,52 @@
+{
+    "testbed_name": "testbed_micropython",
+    "testbed_instance": "ch_hans_1",
+    "time_start": "2026-02-26_20-54-50-CET",
+    "time_end": "2026-02-27_09-03-47-CET",
+    "ref_firmware": "https://github.com/micropython/micropython.git@master",
+    "ref_firmware_metadata": {
+        "git_spec": "https://github.com/micropython/micropython.git@master",
+        "url_link": "https://github.com/micropython/micropython/tree/master",
+        "commit_hash": "104deaa6886caf5dd0e79b9d019327b0a07b8b2d",
+        "rebased": false,
+        "command_describe": {
+            "command": "git describe --all --long --dirty --always",
+            "stdout": "heads/master-0-g104deaa"
+        },
+        "command_log": {
+            "command": "git log --oneline --decorate -n 20",
+            "stdout": "104deaa (BASE) (HEAD -> master, origin/master) zephyr: Use nodelabel when printing device name.\n0dac591 tests/run-multitests.py: Improve error handling for communication error."
+        }
+    },
+    "ref_tests": "https://github.com/micropython/micropython.git@master",
+    "ref_tests_metadata": {
+        "git_spec": "https://github.com/micropython/micropython.git@master",
+        "url_link": "https://github.com/micropython/micropython/tree/master",
+        "commit_hash": "104deaa6886caf5dd0e79b9d019327b0a07b8b2d",
+        "rebased": false,
+        "command_describe": {
+            "command": "git describe --all --long --dirty --always",
+            "stdout": "heads/master-0-g104deaa"
+        },
+        "command_log": {
+            "command": "git log --oneline --decorate -n 20",
+            "stdout": "104deaa (BASE) (HEAD -> master, origin/master) zephyr: Use nodelabel when printing device name.\n0dac591 tests/run-multitests.py: Improve error handling for communication error."
+        }
+    },
+    "trigger": "manually started from octoprobe4",
+    "commandline": "/home/githubrunner/testbed_micropython/.venv/bin/mptest test --micropython-tests=https://github.com/micropython/micropython.git@master --firmware-build=https://github.com/micropython/micropython.git@master --no-multiprocessing --count=2 --skip-fut=FUT_WLAN --skip-fut=FUT_BLE",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/logger_20_info.log",
+    "log_directory": "/home/githubrunner/testbed_micropython/testresults/",
+    "error": "",
+    "directories": {
+        "R": "/home/githubrunner/testbed_micropython/testresults",
+        "P": "/home/githubrunner/testbed_micropython/.venv/bin",
+        "W": "/home/githubrunner/testbed_micropython",
+        "F": "/home/githubrunner/octoprobe_downloads/git-cache/work/firmware_github-com-micropython-micropython",
+        "T": "/home/githubrunner/octoprobe_downloads/git-cache/work/tests_github-com-micropython-micropython"
+    },
+    "git_ref": {
+        "T": "https://github.com/micropython/micropython.git@master",
+        "F": "https://github.com/micropython/micropython.git@master"
+    }
+}

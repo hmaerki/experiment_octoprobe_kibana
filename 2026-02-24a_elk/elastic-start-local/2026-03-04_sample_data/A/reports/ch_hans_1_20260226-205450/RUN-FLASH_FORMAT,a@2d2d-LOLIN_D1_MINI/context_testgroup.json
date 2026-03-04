@@ -1,0 +1,22 @@
+{
+    "directory_relative": "RUN-FLASH_FORMAT,a@2d2d-LOLIN_D1_MINI",
+    "testgroup": "RUN-FLASH_FORMAT",
+    "testid": "RUN-FLASH_FORMAT,a@2d2d-LOLIN_D1_MINI",
+    "tentacle_variant": "2d2d-LOLIN_D1_MINI",
+    "tentacle_variant_role": "2d2d-LOLIN_D1_MINI",
+    "commandline": "format_flash",
+    "tentacle_mcu": "esp8266",
+    "tentacle_reference": "",
+    "time_start": "2026-02-26_21-15-07-CET",
+    "time_end": "2026-02-26_21-15-41-CET",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/RUN-FLASH_FORMAT,a@2d2d-LOLIN_D1_MINI/logger_20_info.log",
+    "outcomes": [
+        {
+            "name": "format_flash",
+            "outcome": "skipped",
+            "text": ""
+        }
+    ],
+    "msg_error": "",
+    "msg_skipped": ""
+}

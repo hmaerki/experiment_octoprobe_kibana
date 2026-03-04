@@ -1,0 +1,52 @@
+{
+    "testbed_name": "testbed_micropython",
+    "testbed_instance": "ch_hans_1",
+    "time_start": "2026-02-26_08-36-48-CET",
+    "time_end": "2026-02-26_20-52-55-CET",
+    "ref_firmware": "https://github.com/micropython/micropython.git~17782",
+    "ref_firmware_metadata": {
+        "git_spec": "https://github.com/micropython/micropython.git~17782",
+        "url_link": "https://github.com/micropython/micropython/pull/17782",
+        "commit_hash": "32003580b2e983b5977045c7a7cd0835a65e7127",
+        "rebased": false,
+        "command_describe": {
+            "command": "git describe --all --long --dirty --always",
+            "stdout": "heads/pr-17782-0-g32003580b"
+        },
+        "command_log": {
+            "command": "git log --oneline --decorate -n 20",
+            "stdout": "32003580b (HEAD -> pr-17782) tests/extmod/machine_spi_rate.py: Skip if too large.\n7f2afd9bc tests/extmod/framebuf_polygon.py: Skip if too large.\n5d3fdd433 stm32/mpthreadport: Increase minimum thread stack size to 2.5k.\na38f8e1bf tests/extmod/machine_uart_tx.py: Make minimum baud 4800, add 38400.\nfd8f9e14d tests/run-tests.py: Skip tests requiring normal error reporting.\n04a8e1a59 tests/extmod/machine_uart_tx.py: Make string longer for more accuracy.\n2c59d5dc5 tests/target_wiring/esp32.py: Check for ESP32C and ESP32-C.\n2515c17f9 ports: Make sure mp_hal_delay_ms(0) handles events.\n4a36c1660 extmod/modlwip: Parse socket constructor arguments before creating obj.\n1d8c3f585 tests/net_inet: Update micropython.org certificate for SSL tests.\nb6a76a4cb tests/micropython/ringio_big.py: Print results at end of test.\ncf35aaf93 tests/extmod/machine_soft_timer.py: Skip on nrf boards.\nad4ec85fb py/objlist: Make list append allocation more gentle.\nb717d8736 tests/misc/rge_sm.py: Use list.append instead of list += [...].\nbc62a5acc esp8266/boards: Include unittest in 512k board variant.\nb845205e0 tests/ports/stm32/adcall.py: Print values if test ADC fails.\n1df89d44a esp32/modules: Convert AttributeError to ImportError.\n37bd89863 tests/run-perfbench.py: Skip misc_mandel if target doesn't have complex.\n238a11745 tests/multi_net/udp_data_multi.py: Reduce number of UDP groups.\n397d74d71 tests/run-tests.py: Skip various tests on small SAMD targets."
+        }
+    },
+    "ref_tests": "https://github.com/micropython/micropython.git~17782",
+    "ref_tests_metadata": {
+        "git_spec": "https://github.com/micropython/micropython.git~17782",
+        "url_link": "https://github.com/micropython/micropython/pull/17782",
+        "commit_hash": "32003580b2e983b5977045c7a7cd0835a65e7127",
+        "rebased": false,
+        "command_describe": {
+            "command": "git describe --all --long --dirty --always",
+            "stdout": "heads/pr-17782-0-g32003580b"
+        },
+        "command_log": {
+            "command": "git log --oneline --decorate -n 20",
+            "stdout": "32003580b (HEAD -> pr-17782) tests/extmod/machine_spi_rate.py: Skip if too large.\n7f2afd9bc tests/extmod/framebuf_polygon.py: Skip if too large.\n5d3fdd433 stm32/mpthreadport: Increase minimum thread stack size to 2.5k.\na38f8e1bf tests/extmod/machine_uart_tx.py: Make minimum baud 4800, add 38400.\nfd8f9e14d tests/run-tests.py: Skip tests requiring normal error reporting.\n04a8e1a59 tests/extmod/machine_uart_tx.py: Make string longer for more accuracy.\n2c59d5dc5 tests/target_wiring/esp32.py: Check for ESP32C and ESP32-C.\n2515c17f9 ports: Make sure mp_hal_delay_ms(0) handles events.\n4a36c1660 extmod/modlwip: Parse socket constructor arguments before creating obj.\n1d8c3f585 tests/net_inet: Update micropython.org certificate for SSL tests.\nb6a76a4cb tests/micropython/ringio_big.py: Print results at end of test.\ncf35aaf93 tests/extmod/machine_soft_timer.py: Skip on nrf boards.\nad4ec85fb py/objlist: Make list append allocation more gentle.\nb717d8736 tests/misc/rge_sm.py: Use list.append instead of list += [...].\nbc62a5acc esp8266/boards: Include unittest in 512k board variant.\nb845205e0 tests/ports/stm32/adcall.py: Print values if test ADC fails.\n1df89d44a esp32/modules: Convert AttributeError to ImportError.\n37bd89863 tests/run-perfbench.py: Skip misc_mandel if target doesn't have complex.\n238a11745 tests/multi_net/udp_data_multi.py: Reduce number of UDP groups.\n397d74d71 tests/run-tests.py: Skip various tests on small SAMD targets."
+        }
+    },
+    "trigger": "manually started from octoprobe4",
+    "commandline": "/home/githubrunner/testbed_micropython/.venv/bin/mptest test --micropython-tests=https://github.com/micropython/micropython.git~17782 --firmware-build=https://github.com/micropython/micropython.git~17782 --no-multiprocessing --count=2 --skip-fut=FUT_WLAN --skip-fut=FUT_BLE",
+    "log_output": "/home/githubrunner/testbed_micropython/testresults/logger_20_info.log",
+    "log_directory": "/home/githubrunner/testbed_micropython/testresults/",
+    "error": "",
+    "directories": {
+        "R": "/home/githubrunner/testbed_micropython/testresults",
+        "P": "/home/githubrunner/testbed_micropython/.venv/bin",
+        "W": "/home/githubrunner/testbed_micropython",
+        "F": "/home/githubrunner/octoprobe_downloads/git-cache/work/firmware_github-com-micropython-micropython",
+        "T": "/home/githubrunner/octoprobe_downloads/git-cache/work/tests_github-com-micropython-micropython"
+    },
+    "git_ref": {
+        "T": "https://github.com/micropython/micropython.git~17782",
+        "F": "https://github.com/micropython/micropython.git~17782"
+    }
+}
