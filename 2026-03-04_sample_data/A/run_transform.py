@@ -8,12 +8,14 @@ import json
 import shutil
 import pathlib
 import typing
+import contextlib
+import time
 
 from elasticsearch import Elasticsearch, helpers
 
 
 ENV_PREFIX = "REMOTE_"
-ENV_PREFIX = "LOCAL_"
+# ENV_PREFIX = "LOCAL_"
 ES_HOST = os.environ[ENV_PREFIX + "ES_HOST"]
 ES_USER = os.environ[ENV_PREFIX + "ES_USER"]
 ES_PASSWORD = os.environ[ENV_PREFIX + "ES_PASSWORD"]
@@ -26,6 +28,14 @@ ID_DELIMITER = " | "
 
 ES_WRITE = True
 WRITE_JSON_FILES = True
+
+
+@contextlib.contextmanager
+def print_duration(label: str):
+    start = time.monotonic()
+    yield
+    elapsed = time.monotonic() - start
+    print(f"{label}: duration {elapsed:.1f}s")
 
 
 @dataclasses.dataclass(frozen=True)
@@ -47,16 +57,17 @@ class Document:
                 f"Expected: {self.id=} != {self.parent.id=}"
             )
 
-        if (self.id_name is not None) and( self.id is not None):
+        if (self.id_name is not None) and (self.id is not None):
             assert self.id_name not in self.dict_doc
             self.dict_doc[self.id_name] = self.id
 
-        if self.parent is not None:
-            assert self.parent.id is not None
-            assert self.parent.id_name is not None
-            assert self.parent.id_name not in self.dict_doc
-            self.dict_doc[self.parent.id_name] = self.parent.id
-
+        parent = self.parent
+        while parent is not None:
+            assert parent.id is not None
+            assert parent.id_name is not None
+            assert parent.id_name not in self.dict_doc
+            self.dict_doc[parent.id_name] = parent.id
+            parent = parent.parent
 
 
 @dataclasses.dataclass(frozen=True)
@@ -151,6 +162,8 @@ class Testgroup:
         self.testgroup_docs.append(group_doc)
 
         for index, dict_outcome in enumerate(outcomes, start=1):
+            outcome_enum = {"passed": 0, "failed": 1, "skipped": 2}[dict_outcome["outcome"]]
+            dict_outcome["outcome_enum"] = outcome_enum
             test_doc = Document(
                 id_name=None,
                 id=None,
@@ -172,6 +185,7 @@ class Elastic:
         self.client = Elasticsearch(
             f"http://{ES_HOST}",
             basic_auth=(ES_USER, ES_PASSWORD),
+            request_timeout=60.0,
         )
         self.template_name = "octoprobe_template"
 
@@ -288,7 +302,8 @@ def main() -> None:
     el.delete_indexes()
     el.put_index_mappings()
 
-    for directory_run in sorted(directory_reports.iterdir(), reverse=True):
+    with print_duration("overall"):
+     for directory_run in sorted(directory_reports.iterdir(), reverse=True):
         print(f"*** {directory_run}")
         if not directory_run.is_dir():
             continue
@@ -300,9 +315,10 @@ def main() -> None:
         testrun.transform_run()
         f = el.write_documents_one_by_one
         f = el.write_documents_bulk
-        f(INDEX_NAME_TESTRUNS, testrun.testrun_docs)
-        f(INDEX_NAME_TESTGROUPS, testrun.testgroup_docs)
-        f(INDEX_NAME_TESTOUTCOMES, testrun.testoutcome_docs)
+        with print_duration(f"{directory_run}"):
+            f(INDEX_NAME_TESTRUNS, testrun.testrun_docs)
+            f(INDEX_NAME_TESTGROUPS, testrun.testgroup_docs)
+            f(INDEX_NAME_TESTOUTCOMES, testrun.testoutcome_docs)
 
     el.close()
 

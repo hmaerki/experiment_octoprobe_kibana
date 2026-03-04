@@ -2,6 +2,9 @@
   "settings": {},
   "mappings": {
     "properties": {
+      "id_run": {
+        "type": "keyword"
+      },
       "id_group": {
         "type": "keyword"
       },
@@ -10,6 +13,9 @@
       },
       "outcome": {
         "type": "keyword"
+      },
+      "outcome_enum": {
+        "type": "byte"
       },
       "text": {
         "type": "text"
