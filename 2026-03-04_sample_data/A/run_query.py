@@ -66,7 +66,7 @@ class QueryOutcomes2:
 FROM op_testoutcomes
 | WHERE id_run == "{self.id_run}"
 | LOOKUP JOIN op_testgroups ON id_group
-| STATS count = COUNT(*) BY id_group, outcome_enum
+| STATS count = COUNT(*) BY id_group, testgroup, outcome_enum
 | SORT id_group, outcome_enum
 | LIMIT {self.limit}
 """
@@ -80,7 +80,7 @@ FROM op_testoutcomes
             if row["id_group"] != last_id_group:
                 print()
                 last_id_group = row["id_group"]
-                print(f"{last_id_group}: ", end="")
+                print(f"{row['testgroup']}: ", end="")
             print(f"{row['outcome_enum']}={row['count']}, ", end="")
 
 
