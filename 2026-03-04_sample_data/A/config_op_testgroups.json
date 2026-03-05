@@ -16,6 +16,10 @@
       "g_tentacle_mcu": {
         "type": "keyword"
       },
+      "@timestamp": {
+        "type": "date",
+        "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+      },
       "g_time_start": {
         "type": "date",
         "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"

@@ -13,6 +13,10 @@
       "r_testbed_instance": {
         "type": "keyword"
       },
+      "@timestamp": {
+        "type": "date",
+        "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
+      },
       "r_time_start": {
         "type": "date",
         "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"

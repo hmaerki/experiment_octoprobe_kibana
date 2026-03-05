@@ -8,7 +8,7 @@
       "id_group": {
         "type": "keyword"
       },
-      "t_test_name": {
+      "t_name": {
         "type": "keyword"
       },
       "t_outcome": {

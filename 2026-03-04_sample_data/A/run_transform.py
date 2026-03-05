@@ -15,7 +15,7 @@ from elasticsearch import Elasticsearch, helpers
 
 
 ENV_PREFIX = "REMOTE_"
-ENV_PREFIX = "LOCAL_"
+# ENV_PREFIX = "LOCAL_"
 ES_HOST = os.environ[ENV_PREFIX + "ES_HOST"]
 ES_USER = os.environ[ENV_PREFIX + "ES_USER"]
 ES_PASSWORD = os.environ[ENV_PREFIX + "ES_PASSWORD"]
@@ -208,6 +208,7 @@ class Elastic:
         if not ES_WRITE:
             return
 
+        print(f"{ES_HOST=}")
         self.client = Elasticsearch(
             f"http://{ES_HOST}",
             basic_auth=(ES_USER, ES_PASSWORD),
