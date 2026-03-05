@@ -12,8 +12,8 @@ def query_outcomes(id_group: str, limit: int) -> str:
 FROM op_testoutcomes
 | LOOKUP JOIN op_testgroups ON id_group
 | WHERE id_group == "{id_group}"
-| KEEP name, outcome
-| SORT name
+| KEEP t_name, t_outcome
+| SORT t_name
 | LIMIT {limit}
 """
 
@@ -41,10 +41,10 @@ def query_summary(id_run: str) -> str:
 FROM op_testoutcomes
 | WHERE id_run == "{id_run}"
 | LOOKUP JOIN op_testgroups ON id_group
-| EVAL is_passed = CASE(outcome == "passed", 1, 0),
-        is_failed = CASE(outcome == "failed", 1, 0)
-| STATS passed = SUM(is_passed), failed = SUM(is_failed) BY testgroup
-| SORT testgroup
+| EVAL is_passed = CASE(t_outcome == "passed", 1, 0),
+        is_failed = CASE(t_outcome == "failed", 1, 0)
+| STATS passed = SUM(is_passed), failed = SUM(is_failed) BY g_testgroup
+| SORT g_testgroup
 | LIMIT 1000
 """
 
@@ -66,8 +66,8 @@ class QueryOutcomes2:
 FROM op_testoutcomes
 | WHERE id_run == "{self.id_run}"
 | LOOKUP JOIN op_testgroups ON id_group
-| STATS count = COUNT(*) BY id_group, testgroup, outcome_enum
-| SORT id_group, outcome_enum
+| STATS count = COUNT(*) BY id_group, g_testgroup, t_outcome_enum
+| SORT id_group, t_outcome_enum
 | LIMIT {self.limit}
 """
 
@@ -80,8 +80,8 @@ FROM op_testoutcomes
             if row["id_group"] != last_id_group:
                 print()
                 last_id_group = row["id_group"]
-                print(f"{row['testgroup']}: ", end="")
-            print(f"{row['outcome_enum']}={row['count']}, ", end="")
+                print(f"{row['g_testgroup']}: ", end="")
+            print(f"{row['t_outcome_enum']}={row['count']}, ", end="")
 
 
 def main() -> None:

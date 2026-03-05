@@ -10,51 +10,51 @@
       "id_group": {
         "type": "keyword"
       },
-      "testgroup": {
+      "g_testgroup": {
         "type": "keyword"
       },
-      "tentacle_mcu": {
+      "g_tentacle_mcu": {
         "type": "keyword"
       },
-      "time_start": {
+      "g_time_start": {
         "type": "date",
         "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
       },
-      "time_end": {
+      "g_time_end": {
         "type": "date",
         "format": "yyyy-MM-dd_HH-mm-ss-zzz||epoch_millis"
       },
-      "directory_relative": {
+      "g_directory_relative": {
         "type": "keyword"
       },
-      "testid": {
+      "g_testid": {
         "type": "keyword"
       },
-      "tentacle_variant": {
+      "g_tentacle_variant": {
         "type": "keyword"
       },
-      "tentacle_variant_role": {
+      "g_tentacle_variant_role": {
         "type": "keyword"
       },
-      "commandline": {
+      "g_commandline": {
         "type": "text"
       },
-      "tentacle_reference": {
+      "g_tentacle_reference": {
         "type": "keyword"
       },
-      "log_output": {
+      "g_log_output": {
         "type": "keyword"
       },
-      "msg_error": {
+      "g_msg_error": {
         "type": "text"
       },
-      "msg_skipped": {
+      "g_msg_skipped": {
         "type": "text"
       },
-      "msg_error_count": {
+      "g_msg_error_count": {
         "type": "integer"
       },
-      "msg_skipped_count": {
+      "g_msg_skipped_count": {
         "type": "integer"
       }
     }

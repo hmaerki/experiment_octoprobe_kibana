@@ -29,6 +29,10 @@ ID_DELIMITER = " | "
 ES_WRITE = True
 WRITE_JSON_FILES = True
 
+PREFIX_RUN = "r_"
+PREFIX_GROUP = "g_"
+PREFIX_TEST = "t_"
+
 
 @contextlib.contextmanager
 def print_duration(label: str):
@@ -40,8 +44,10 @@ def print_duration(label: str):
 
 @dataclasses.dataclass(frozen=True)
 class Document:
+    prefix: str
     id_name: str | None
     id: str | None
+    timestamp: str | None
     parent: typing.Self | None
     dict_doc: dict[str, str | int | dict]
 
@@ -50,12 +56,18 @@ class Document:
         assert isinstance(self.id, str | None), self.id
         if self.id is not None:
             assert self.id.find("/") == -1, f"id='{self.id}' should not contain a '/'!"
+        assert isinstance(self.timestamp, str | None), self.timestamp
         assert isinstance(self.parent, Document | None), self.id
         assert isinstance(self.dict_doc, dict), self.dict_doc
         if self.parent is not None:
             assert self.id != self.parent.id, (
                 f"Expected: {self.id=} != {self.parent.id=}"
             )
+
+        self.apply_prefix()
+
+        if self.timestamp is not None:
+            self.dict_doc["@timestamp"] = self.timestamp
 
         if (self.id_name is not None) and (self.id is not None):
             assert self.id_name not in self.dict_doc
@@ -69,6 +81,12 @@ class Document:
             self.dict_doc[parent.id_name] = parent.id
             parent = parent.parent
 
+    def apply_prefix(self) -> None:
+        keys = list(self.dict_doc)
+        for k in keys:
+            self.dict_doc[self.prefix + k] = self.dict_doc[k]
+        for k in keys:
+            del self.dict_doc[k]
 
 @dataclasses.dataclass(frozen=True)
 class Testgroup:
@@ -108,8 +126,10 @@ class Testgroup:
         dict_run = self.read_json(filename_run)
         id_run = dict_run["testbed_instance"] + ID_DELIMITER + dict_run["time_start"]
         run_doc = Document(
+            prefix=PREFIX_RUN,
             id_name="id_run",
             id=id_run,
+            timestamp=dict_run["time_start"],
             parent=None,
             dict_doc=dict_run,
         )
@@ -153,8 +173,10 @@ class Testgroup:
         id_group = id_run + ID_DELIMITER + dict_group["testid"]
 
         group_doc = Document(
+            prefix=PREFIX_GROUP,
             id_name="id_group",
             id=id_group,
+            timestamp=dict_group["time_start"],
             parent=run_doc,
             dict_doc=dict_group,
         )
@@ -167,8 +189,10 @@ class Testgroup:
             ]
             dict_outcome["outcome_enum"] = outcome_enum
             test_doc = Document(
+                prefix=PREFIX_TEST,
                 id_name=None,
                 id=None,
+                timestamp=None,
                 parent=group_doc,
                 dict_doc=dict_outcome,
             )
@@ -305,7 +329,9 @@ def main() -> None:
     el.put_index_mappings()
 
     with print_duration("overall"):
-        for i_run,directory_run in enumerate(sorted(directory_reports.iterdir(), reverse=True)):
+        for i_run, directory_run in enumerate(
+            sorted(directory_reports.iterdir(), reverse=True)
+        ):
             print(f"*** {directory_run}")
             if not directory_run.is_dir():
                 continue

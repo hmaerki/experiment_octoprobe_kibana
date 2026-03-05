@@ -8,16 +8,16 @@
       "id_group": {
         "type": "keyword"
       },
-      "test_name": {
+      "t_test_name": {
         "type": "keyword"
       },
-      "outcome": {
+      "t_outcome": {
         "type": "keyword"
       },
-      "outcome_enum": {
+      "t_outcome_enum": {
         "type": "byte"
       },
-      "text": {
+      "t_text": {
         "type": "text"
       }
     }
