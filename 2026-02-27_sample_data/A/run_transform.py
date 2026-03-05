@@ -337,8 +337,8 @@ def main() -> None:
             directory_run=directory_run,
         )
         testrun.transform_run()
-        # el.write_documents_bulk(testrun.documents)
-        el.write_documents_one_by_one(testrun.documents)
+        el.write_documents_bulk(testrun.documents)
+        # el.write_documents_one_by_one(testrun.documents)
 
     el.close()
 

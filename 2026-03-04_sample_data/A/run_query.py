@@ -83,6 +83,7 @@ FROM op_testoutcomes
                 print(f"{row['g_testgroup']}: ", end="")
             print(f"{row['t_outcome_enum']}={row['count']}, ", end="")
 
+        print("\n---")
 
 def main() -> None:
     client = run_transform.Elastic()
