@@ -15,7 +15,7 @@ from elasticsearch import Elasticsearch, helpers
 
 
 ENV_PREFIX = "REMOTE_"
-# ENV_PREFIX = "LOCAL_"
+ENV_PREFIX = "LOCAL_"
 ES_HOST = os.environ[ENV_PREFIX + "ES_HOST"]
 ES_USER = os.environ[ENV_PREFIX + "ES_USER"]
 ES_PASSWORD = os.environ[ENV_PREFIX + "ES_PASSWORD"]
@@ -106,7 +106,7 @@ class Testgroup:
             raise FileNotFoundError(f"Missing testrun file: {filename_run}")
 
         dict_run = self.read_json(filename_run)
-        id_run = dict_run["time_start"]
+        id_run = dict_run["testbed_instance"] + ID_DELIMITER + dict_run["time_start"]
         run_doc = Document(
             id_name="id_run",
             id=id_run,
@@ -162,7 +162,9 @@ class Testgroup:
         self.testgroup_docs.append(group_doc)
 
         for index, dict_outcome in enumerate(outcomes, start=1):
-            outcome_enum = {"passed": 0, "failed": 1, "skipped": 2}[dict_outcome["outcome"]]
+            outcome_enum = {"passed": 0, "failed": 1, "skipped": 2}[
+                dict_outcome["outcome"]
+            ]
             dict_outcome["outcome_enum"] = outcome_enum
             test_doc = Document(
                 id_name=None,
@@ -303,22 +305,32 @@ def main() -> None:
     el.put_index_mappings()
 
     with print_duration("overall"):
-     for directory_run in sorted(directory_reports.iterdir(), reverse=True):
-        print(f"*** {directory_run}")
-        if not directory_run.is_dir():
-            continue
-        testrun = Testgroup(
-            directory_elastic=directory_elastic,
-            directory_reports=directory_reports,
-            directory_run=directory_run,
-        )
-        testrun.transform_run()
-        f = el.write_documents_one_by_one
-        f = el.write_documents_bulk
-        with print_duration(f"{directory_run}"):
-            f(INDEX_NAME_TESTRUNS, testrun.testrun_docs)
-            f(INDEX_NAME_TESTGROUPS, testrun.testgroup_docs)
-            f(INDEX_NAME_TESTOUTCOMES, testrun.testoutcome_docs)
+        for i_run,directory_run in enumerate(sorted(directory_reports.iterdir(), reverse=True)):
+            print(f"*** {directory_run}")
+            if not directory_run.is_dir():
+                continue
+            testrun = Testgroup(
+                directory_elastic=directory_elastic,
+                directory_reports=directory_reports,
+                directory_run=directory_run,
+            )
+            testrun.transform_run()
+
+            if len(testrun.testoutcome_docs) < 100:
+                # Skip small runs
+                print(f"   only {len(testrun.testoutcome_docs)} outcomes - skipped")
+                continue
+
+            f = el.write_documents_one_by_one
+            f = el.write_documents_bulk
+            with print_duration(f"{directory_run}"):
+                f(INDEX_NAME_TESTRUNS, testrun.testrun_docs)
+                f(INDEX_NAME_TESTGROUPS, testrun.testgroup_docs)
+                f(INDEX_NAME_TESTOUTCOMES, testrun.testoutcome_docs)
+
+            if True:
+                if i_run > 10:
+                    break
 
     el.close()
 
