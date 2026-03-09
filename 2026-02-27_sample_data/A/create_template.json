@@ -1,16 +1,17 @@
 {
     "index_patterns": [
-        "octoprobe_*"
+        "op_mp_*"
     ],
     "template": {
         "settings": {
             "number_of_shards": 1,
             "number_of_replicas": 0,
             "index": {
-                "mode": "lookup"
+                "mode": "standard"
             }
         },
         "mappings": {
+            "dynamic_templates": [],
             "properties": {
                 "@timestamp": {
                     "type": "date",
@@ -24,13 +25,6 @@
                 },
                 "id_test": {
                     "type": "keyword"
-                },
-                "id_join_multiple": {
-                    "type": "join",
-                    "relations": {
-                        "id_run": "id_group",
-                        "if_group": "id_test"
-                    }
                 },
                 "r_testbed_name": {
                     "type": "keyword"

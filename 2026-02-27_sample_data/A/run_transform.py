@@ -1,19 +1,3 @@
-"""
-Resolve field name collisions:
-
-Field	context.json	context_testgroup.json
-commandline	Full path + args	run-natmodtests.py
-time_start	2026-02-26_20-54-50-CET	2026-02-27_01-15-42-CET
-time_end	2026-02-27_09-03-47-CET	2026-02-27_01-17-22-CET
-log_output
-
-Build the hierarchy:
-* commit
-* testrun
-* testgroup
-* testresult
-"""
-
 from __future__ import annotations
 
 import os
@@ -22,6 +6,8 @@ import json
 import shutil
 import pathlib
 import typing
+import urllib.request
+import base64
 
 from elasticsearch import Elasticsearch, helpers
 
@@ -34,15 +20,39 @@ ENV_PREFIX = "REMOTE_"
 ES_HOST = os.environ[ENV_PREFIX + "ES_HOST"]
 ES_USER = os.environ[ENV_PREFIX + "ES_USER"]
 ES_PASSWORD = os.environ[ENV_PREFIX + "ES_PASSWORD"]
+KIBANA_HOST = os.environ[ENV_PREFIX + "KIBANA_HOST"]
 
-INDEX_NAME = "octoprobe_a"
+INDEX_NAME = "op_mp_index"
 
 ES_WRITE = True
 WRITE_JSON_FILES = True
 INHERIT_PARENT_PROPERTIES = True
+WRITE_JSON_TEST_GROUP = False
+WRITE_BULK = True
+
 
 ID_DELIMITER = " | "
 JOIN_MULTIPLE = "id_join_multiple"
+DO_JOIN_MULTIPLE = False
+"""
+2026-02-27_sample_data/A/create_template.json
+    "id_join_multiple": {
+        "type": "join",
+        "relations": {
+            "id_run": "id_group",
+            "id_group": "id_test"
+        }
+    },
+"""
+
+DATAVIEW_TITLE = "op_mp_*"
+DATAVIEW_BODY_DICT = {
+    "data_view": {
+        "title": DATAVIEW_TITLE,
+        "name": "op_mp_*",
+        "timeFieldName": "@timestamp",
+    }
+}
 
 
 @dataclasses.dataclass(frozen=True)
@@ -75,10 +85,12 @@ class Document:
         self.dict_doc[self.id_name] = self.id
 
         assert JOIN_MULTIPLE not in self.dict_doc
-        dict_join = {"name": self.id_name}
-        if self.parent is not None:
-            dict_join["parent"] = self.parent.id
-        self.dict_doc[JOIN_MULTIPLE] = dict_join
+        if DO_JOIN_MULTIPLE:
+            dict_join = {"name": self.id_name}
+            if WRITE_JSON_TEST_GROUP:
+                if self.parent is not None:
+                    dict_join["parent"] = self.parent.id
+            self.dict_doc[JOIN_MULTIPLE] = dict_join
 
         if not INHERIT_PARENT_PROPERTIES:
             return
@@ -144,10 +156,11 @@ class Testgroup:
             parent=None,
             dict_doc=dict_run,
         )
-        self.write_json(
-            filename_json=filename_run,
-            document=run_doc,
-        )
+        if WRITE_JSON_TEST_GROUP:
+            self.write_json(
+                filename_json=filename_run,
+                document=run_doc,
+            )
 
         for directory_testgroup in self.directory_run.iterdir():
             self.transform_group(
@@ -177,7 +190,9 @@ class Testgroup:
         tentacle_list = tentacle_variant.split("-")
         dict_group["tentacle_serial_extension"] = tentacle_list[0]
         dict_group["tentacle_spec_extension"] = tentacle_list[1]
-        dict_group["tentacle_firmware_variant_extension"] = "" if len(tentacle_list) <3 else tentacle_list[2]
+        dict_group["tentacle_firmware_variant_extension"] = (
+            "" if len(tentacle_list) < 3 else tentacle_list[2]
+        )
         id_group = id_run + ID_DELIMITER + dict_group["testid"]
 
         group_doc = Document(
@@ -188,7 +203,8 @@ class Testgroup:
             parent=run_doc,
             dict_doc=dict_group,
         )
-        self.write_json(filename_group, document=group_doc)
+        if WRITE_JSON_TEST_GROUP:
+            self.write_json(filename_group, document=group_doc)
 
         for index, dict_outcome in enumerate(outcomes, start=1):
             test_name = dict_outcome["name"].replace("/", "-")
@@ -216,7 +232,7 @@ class Elastic:
             f"http://{ES_HOST}",
             basic_auth=(ES_USER, ES_PASSWORD),
         )
-        self.template_name = "octoprobe_template"
+        self.template_name = "op_mp_template"
 
     def close(self) -> None:
         self.client.close()
@@ -230,6 +246,16 @@ class Elastic:
             print(f"Deleted index: {INDEX_NAME}")
         except Exception as exc:
             print(f"Failed to delete index: {exc}")
+
+    def create_index(self) -> None:
+        if not ES_WRITE:
+            return
+
+        try:
+            self.client.indices.create(index=INDEX_NAME)
+            print(f"Created index: {INDEX_NAME}")
+        except Exception as exc:
+            print(f"Failed to create index: {exc}")
 
     def delete_index_template(self) -> None:
         if not ES_WRITE:
@@ -246,7 +272,7 @@ class Elastic:
             # print(f"Failed to delete template: {exc}")
             pass
 
-    def apply_index_template(self) -> None:
+    def create_index_template(self) -> None:
         template_path = pathlib.Path(__file__).parent / "create_template.json"
 
         try:
@@ -261,6 +287,49 @@ class Elastic:
             print(f"Failed to apply template: {exc}")
             raise
 
+    def _kibana_request(
+        self, path: str, *, method: str = "GET", data: bytes | None = None
+    ) -> urllib.request.Request:
+        req = urllib.request.Request(
+            f"http://{KIBANA_HOST}{path}",
+            data=data,
+            headers={
+                "Content-Type": "application/json",
+                "kbn-xsrf": "true",
+            },
+            method=method,
+        )
+        credentials = base64.b64encode(f"{ES_USER}:{ES_PASSWORD}".encode()).decode()
+        req.add_header("Authorization", f"Basic {credentials}")
+        return req
+
+    def delete_dataview(self) -> None:
+        req = self._kibana_request("/api/data_views")
+        with urllib.request.urlopen(req) as response:
+            body = json.loads(response.read())
+        for dv in body.get("data_view", []):
+            if dv.get("title") == DATAVIEW_TITLE:
+                dv_id = dv["id"]
+                del_req = self._kibana_request(
+                    f"/api/data_views/data_view/{dv_id}", method="DELETE"
+                )
+                with urllib.request.urlopen(del_req) as del_response:
+                    print(
+                        f"Deleted data view '{DATAVIEW_TITLE}' (id={dv_id}): {del_response.status}"
+                    )
+
+    def create_dataview(self) -> None:
+        try:
+            data = json.dumps(DATAVIEW_BODY_DICT).encode("utf-8")
+            req = self._kibana_request(
+                "/api/data_views/data_view", method="POST", data=data
+            )
+            with urllib.request.urlopen(req) as response:
+                print(f"Created data view: {response.status}")
+        except Exception as exc:
+            print(f"Failed to create data view: {exc}")
+            raise
+
     def write_documents_one_by_one(self, documents: list[Document]) -> None:
         if not ES_WRITE:
             return
@@ -271,8 +340,9 @@ class Elastic:
             assert isinstance(document, Document)
             try:
                 routing = None
-                if document.parent is not None:
-                    routing = document.parent.id
+                if DO_JOIN_MULTIPLE:
+                    if document.parent is not None:
+                        routing = document.parent.id
                 self.client.index(
                     index=INDEX_NAME,
                     document=document.dict_doc,
@@ -323,9 +393,16 @@ def main() -> None:
         shutil.rmtree(directory_elastic)
 
     el = Elastic()
-    el.delete_index()
+
+    # Delete
+    el.delete_dataview()
     el.delete_index_template()
-    el.apply_index_template()
+    el.delete_index()
+
+    # Create from scratch
+    el.create_index_template()
+    el.create_index()
+    el.create_dataview()
 
     for directory_run in sorted(directory_reports.iterdir(), reverse=True):
         print(f"*** {directory_run}")
@@ -337,8 +414,10 @@ def main() -> None:
             directory_run=directory_run,
         )
         testrun.transform_run()
-        el.write_documents_bulk(testrun.documents)
-        # el.write_documents_one_by_one(testrun.documents)
+        if WRITE_BULK:
+            el.write_documents_bulk(testrun.documents)
+        else:
+            el.write_documents_one_by_one(testrun.documents)
 
     el.close()
 

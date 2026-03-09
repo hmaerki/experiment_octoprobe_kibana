@@ -30,3 +30,7 @@ FROM op_testgroups
 
 
 https://www.elastic.co/docs/explore-analyze/query-filter/languages/esql-kibana#esql-multi-values-controls
+
+```sql
+FROM logs-* | WHERE MV_CONTAINS(?values, field)
+```

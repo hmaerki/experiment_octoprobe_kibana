@@ -7,6 +7,10 @@
 		{
 			"name": "pytest-elasticsearch",
 			"path": "../fork_pytest-elasticsearch"
+		},
+		{
+			"name": "system-testing",
+			"path": "../privat_kibana_system_testing"
 		}
 	],
 	"settings": {
